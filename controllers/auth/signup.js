@@ -95,7 +95,7 @@ module.exports = async (req, res) => {
   } catch (error) {
     sendErrorResponse(
       res,
-      500,
+      200,
       "Failed to create your account.",
       error.message
     );

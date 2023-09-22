@@ -74,8 +74,8 @@ module.exports = async (req, res) => {
       message: "You Subscribed the plan successfully.",
     });
   } catch (error) {
-    return res.status(500).json({
-      code: 500,
+    return res.status(200).json({
+      code: 200,
       status: false,
       message: "Failed for creating subscription",
       error: error.message,

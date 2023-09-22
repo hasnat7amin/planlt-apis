@@ -23,6 +23,6 @@ module.exports = async (req, res) => {
 
         
     } catch (error) {
-        sendErrorResponse(res,500,"Failed to create your account." , error.message)
+        sendErrorResponse(res,200,"Failed to create your account." , error.message)
     }
 }

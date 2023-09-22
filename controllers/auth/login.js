@@ -30,7 +30,7 @@ module.exports = async (req, res) => {
   } catch (error) {
     sendErrorResponse(
       res,
-      500,
+      200,
       "Failed to login with your credentials.",
       error.message
     );

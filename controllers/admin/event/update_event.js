@@ -47,8 +47,8 @@ module.exports = async (req, res) => {
       qrCodeImage: qrCode,
     });
   } catch (error) {
-    return res.status(500).json({
-      code: 500,
+    return res.status(200).json({
+      code: 200,
       status: false,
       message: "Failed to update event details.",
       error: error.message,

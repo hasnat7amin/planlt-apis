@@ -26,8 +26,8 @@ module.exports = async (req, res) => {
       result: events,
     });
   } catch (error) {
-    return res.status(500).json({
-      code: 500,
+    return res.status(200).json({
+      code: 200,
       status: false,
       message: "Failed to fetch events.",
       error: error.message,
