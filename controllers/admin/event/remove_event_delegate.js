@@ -9,11 +9,7 @@ module.exports = async (req, res) => {
     const event = await Event.findById(eventId);
 
     if (!event) {
-      return res.status(404).json({
-        code: 404,
-        status: false,
-        message: "Event not found.",
-      });
+      throw new Error("Event not found");
     }
 
     // Remove the specified delegate IDs from the event's delegates
@@ -29,8 +25,8 @@ module.exports = async (req, res) => {
       result: event,
     });
   } catch (error) {
-    return res.status(400).json({
-      code: 400,
+    return res.status(500).json({
+      code: 500,
       status: false,
       message: "Failed to remove delegates from the event.",
       error: error.message,

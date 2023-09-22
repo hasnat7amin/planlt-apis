@@ -14,11 +14,7 @@ module.exports = async (req, res) => {
     let event = await Event.findById(eventId);
 
     if (!event) {
-      return res.status(404).json({
-        code: 404,
-        status: false,
-        message: "Event not found.",
-      });
+      throw new Error("Event not found")
     }
 
     // Create an array to store user IDs for the delegates
@@ -110,8 +106,8 @@ module.exports = async (req, res) => {
       qrCodeImage: qrCode, // Include the QR code image in the response
     });
   } catch (error) {
-    return res.status(400).json({
-      code: 400,
+    return res.status(500).json({
+      code: 500,
       status: false,
       message: "Failed to create the event.",
       error: error.message,

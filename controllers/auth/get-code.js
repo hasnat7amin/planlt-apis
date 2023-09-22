@@ -45,7 +45,7 @@ module.exports = async (req, res) => {
   } catch (error) {
     sendErrorResponse(
       res,
-      400,
+      500,
       "Failed to send code on your email.",
       error.message
     );

@@ -9,11 +9,7 @@ module.exports = async (req, res) => {
     const user = await Users.findById(userId);
 
     if (!user) {
-      return res.status(404).json({
-        code: 404,
-        status: false,
-        message: "Users not found.",
-      });
+      throw new Error("Couldn't find the user.")
     }
 
     // Update the user's properties with the provided data
@@ -44,8 +40,8 @@ module.exports = async (req, res) => {
       result: user,
     });
   } catch (error) {
-    return res.status(400).json({
-      code: 400,
+    return res.status(500).json({
+      code: 500,
       status: false,
       message: "Failed to update user information.",
       error: error.message,

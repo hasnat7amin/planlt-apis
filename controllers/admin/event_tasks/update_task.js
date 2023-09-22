@@ -11,22 +11,14 @@ module.exports = async (req, res) => {
     const event = await Event.findById(eventId);
 
     if (!event) {
-      return res.status(404).json({
-        code: 404,
-        status: false,
-        message: "Event not found.",
-      });
+      throw new Error("Event not found.")
     }
 
     // Find the task by ID
     let task = await Task.findById(taskId);
 
     if (!task) {
-      return res.status(404).json({
-        code: 404,
-        status: false,
-        message: "Task not found.",
-      });
+      throw new Error("Task not found.")
     }
 
     // Update the task properties
@@ -67,8 +59,8 @@ module.exports = async (req, res) => {
       result: task,
     });
   } catch (error) {
-    return res.status(400).json({
-      code: 400,
+    return res.status(500).json({
+      code: 500,
       status: false,
       message: "Failed to update the task.",
       error: error.message,

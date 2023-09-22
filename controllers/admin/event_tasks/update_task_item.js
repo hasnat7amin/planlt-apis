@@ -13,22 +13,14 @@ module.exports = async (req, res) => {
       const task = await Task.findById(taskId);
   
       if (!task) {
-        return res.status(404).json({
-          code: 404,
-          status: false,
-          message: "Task not found.",
-        });
+        throw new Error(`Task not found.`);
       }
   
       // Find the task item within the task
       const taskItem = task.items.id(itemId);
   
       if (!taskItem) {
-        return res.status(404).json({
-          code: 404,
-          status: false,
-          message: "Task item not found.",
-        });
+        throw new Error(`Task item not found.`);
       }
   
       // Update the task item properties based on the provided updateData
@@ -70,8 +62,8 @@ module.exports = async (req, res) => {
         result: taskItem,
       });
     } catch (error) {
-      return res.status(400).json({
-        code: 400,
+      return res.status(500).json({
+        code: 500,
         status: false,
         message: "Failed to update the task item.",
         error: error.message,

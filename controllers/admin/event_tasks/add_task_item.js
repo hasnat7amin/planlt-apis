@@ -11,11 +11,7 @@ module.exports = async (req, res) => {
     const task = await Task.findById(taskId);
 
     if (!task) {
-      return res.status(404).json({
-        code: 404,
-        status: false,
-        message: "Task not found.",
-      });
+     throw new Error('Task not found');
     }
 
     // Create a new task item
@@ -62,8 +58,8 @@ module.exports = async (req, res) => {
       result: taskItem,
     });
   } catch (error) {
-    return res.status(400).json({
-      code: 400,
+    return res.status(500).json({
+      code: 500,
       status: false,
       message: "Failed to create the task item.",
       error: error.message,

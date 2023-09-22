@@ -10,31 +10,19 @@ module.exports = async (req, res) => {
     const user = await Users.findById(userId);
 
     if (!user) {
-      return res.status(404).json({
-        code: 404,
-        status: false,
-        message: "Users not found.",
-      });
+      throw new Error("user not found");
     }
 
     // Verify the old password
     const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
 
     if (!isPasswordValid) {
-      return res.status(400).json({
-        code: 400,
-        status: false,
-        message: "Your old password is incorrect.",
-      });
+      throw new Error("Your old password is incorrect.");
     }
 
     // Check if the new password and confirm password match
     if (newPassword !== confirmPassword) {
-      return res.status(400).json({
-        code: 400,
-        status: false,
-        message: "New password and confirm password do not match.",
-      });
+      throw new Error("New password and confirm password do not match.");
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -53,8 +41,8 @@ module.exports = async (req, res) => {
       message: "Password changed successfully.",
     });
   } catch (error) {
-    return res.status(400).json({
-      code: 400,
+    return res.status(500).json({
+      code: 500,
       status: false,
       message: "Failed to change the password.",
       error: error.message,

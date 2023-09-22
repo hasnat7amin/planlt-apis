@@ -5,11 +5,7 @@ module.exports = async (req, res) => {
   try {
     // Check if a file was uploaded
     if (!req.file) {
-      return res.status(400).json({
-        code: 400,
-        status: false,
-        message: "No image file provided.",
-      });
+      throw new Error("No image upload.")
     }
 
     // Get the user ID from the request, assuming it's in req.params or req.body
@@ -19,11 +15,7 @@ module.exports = async (req, res) => {
     const user = await Users.findById(userId);
 
     if (!user) {
-      return res.status(404).json({
-        code: 404,
-        status: false,
-        message: "Users not found.",
-      });
+      throw new Error("User not found.")
     }
 
     // Upload the image to Firebase Storage
@@ -42,8 +34,8 @@ module.exports = async (req, res) => {
       result: user,
     });
   } catch (error) {
-    return res.status(400).json({
-      code: 400,
+    return res.status(500).json({
+      code: 500,
       status: false,
       message: "Failed to add user image.",
       error: error.message,

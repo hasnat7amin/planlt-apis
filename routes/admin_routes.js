@@ -25,6 +25,7 @@ router.put("/event/task/:taskId/item/update", admin_authorize, AdminController.U
 router.put("/profile/change-password", admin_authorize, AdminController.ChangePassword)
 router.put("/profile/change-information", admin_authorize, AdminController.PersonalInfo)
 router.put("/profile/change-image", admin_authorize,upload.single("image"),admin_authorize,AdminController.ChangeImage)
-
+router.get("/profile/create/subscription", admin_authorize,AdminController.CreateSubscrption)
+router.get("/:userId/subscriptions/success",AdminController.ConfirmSubscription)
 
 module.exports = router;

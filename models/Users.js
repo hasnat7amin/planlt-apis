@@ -33,8 +33,14 @@ const UserSchema = new mongoose.Schema({
   },
   membership: {
     type: String,
-    enum: ["none", "bronze", "silver", "gold"],
+    enum: ["none", "premium"],
     default: "none",
+  },
+  subscriptionSessionId: {
+    type: String,
+  },
+  subscriptionCheckoutUrl:{
+    type: String,
   },
   membershipExpiresAt: {
     type: Date,
