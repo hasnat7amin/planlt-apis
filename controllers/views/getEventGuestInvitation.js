@@ -8,13 +8,13 @@ module.exports = async (req, res) => {
     const event = await Event.findById(eventId);
 
     if (!event) {
-      return res.status(404).send("Event not found");
+      return res.render("404",{errorDescription:"Event not found"})
     }
 
     // Render the EJS page and pass the event data
     res.render("eventGuestInvitation", { event });
   } catch (error) {
     console.error("Error fetching event:", error);
-    res.status(500).send("Internal Server Error");
+    return res.render("404",{errorDescription:"Internal Server Error"})
   }
 };

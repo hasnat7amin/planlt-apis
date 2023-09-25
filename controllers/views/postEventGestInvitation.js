@@ -24,9 +24,18 @@ module.exports = async (req, res) => {
 
     const eventGuest = await EventGuest.create(guestData);
     eventGuest.scheduleDeletion();
+
     const serverUrl = `${req.protocol}://${req.get("host")}`;
 
-    return res.redirect(`${serverUrl}/v1/event/${eventId}/guest/${eventGuest._id}/payment` );
+    console.log( `${serverUrl}/v1/event/${eventId}/guest/${eventGuest._id}/payment`)
+
+    return res.status(200).json({
+      code:200,
+      status:true,
+      message:"Guest Event added successfully.",
+      result: {event: event, guest:eventGuest,redirect: `${serverUrl}/v1/event/${eventId}/guest/${eventGuest._id}/payment`}
+    })
+
   } catch (error) {
     console.error('Error handling event invitation:', error);
     return res.status(400).json({

@@ -37,7 +37,7 @@ module.exports = async (req, res) => {
       // Send invitation links to all phone numbers
       for (const invitation of event.invitations) {
         const phoneNumber = invitation.phoneNo; // Replace with your phone number field
-        const invitationLink =  `${serverUrl}/event/${event._id}`; // Customize your invitation link
+        const invitationLink =  `${serverUrl}/v1/event/${event._id}/guest/invitation`; // Customize your invitation link
         await sendSms(phoneNumber, `Event Invitation: ${invitationLink}`); // Customize your SMS content and implement sendSms function
       }
     }
@@ -47,9 +47,9 @@ module.exports = async (req, res) => {
 
 
     // Generate a QR code for the event
-    const qrCodeData = `${serverUrl}/event/${event._id}`;
+    const qrCodeData = `${serverUrl}/v1/event/${event._id}/guest/invitation`;
     const qrCode = await qr.toDataURL(qrCodeData);
-    const invitationLink = `${serverUrl}/event/${event._id}`;
+    const invitationLink = `${serverUrl}/v1/event/${event._id}/guest/invitation`;
 
     return res.status(200).json({
       code: 200,

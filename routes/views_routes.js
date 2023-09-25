@@ -8,4 +8,9 @@ router.post("/event/:id/guest/invitation", ViewsController.PostEventGuestInvitat
 
 router.get("/event/:eventId/guest/:guestId/payment", ViewsController.GetEventGuestPayment)
 
+router.post("/event/:eventId/guest/:guestId/payment/stripe",ViewsController.GetEventGuestPayStripeCheckout)
+router.get("/event/:eventId/guest/:guestId/payment/stripe/success",ViewsController.GetEventGuestPayStripeConfirm);
+router.get("/event/:eventId/guest/:guestId/payment/stripe/cancel",ViewsController.GetEventGuestPayStripeConfirm);
+
+
 module.exports = router;

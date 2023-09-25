@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment Unsuccessful</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-200 flex items-center justify-center min-h-screen my-10">
+    <div class="bg-white p-10 rounded-lg shadow-lg md:w-1/2 w-full">
+      <div class="text-center mb-5">
+        <img
+          src="/images/error.png"
+          alt="Error Image"
+          class="w-64 mx-auto mb-5"
+        />
+        <h1 class="text-2xl font-bold mt-3">Payment Unsuccessful</h1>
+        <p class="text-red-600 font-semibold">
+          Oops! Something went wrong with the payment.
+        </p>
+        <p class="text-gray-600 font-semibold mb-10">
+          Please try again or contact support.
+        </p>
+        <a href="<%= link %>" class="text-white bg-blue-500 mt-5 hover:bg-blue-700 py-2 px-6 rounded-full transition duration-300">Pay Now</a>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,41 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Event Payment</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-200 flex items-center justify-center min-h-screen my-10">
-  <div class="bg-white p-10 rounded-lg shadow-lg w-1/2">
-    <div class="text-center mb-5">
-      <!-- Event Image, Name, and Price (populated from controller) -->
-      <img src="<%= event.image %>" alt="Event Image" class="w-64 mx-auto rounded-lg">
-      <h1 class="text-2xl font-bold mt-3"><%= event.name %></h1>
-      <p class="text-black font-semibold">Price: $<%= event.price %></p>
-    </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Event Payment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-200 flex items-center justify-center min-h-screen my-10">
+    <div class="bg-white p-10 rounded-lg shadow-lg md:w-1/2 w-full">
+      <div class="text-center mb-5">
+        <!-- Event Image, Name, and Price (populated from controller) -->
+        <img
+          src="<%= event.image %>"
+          alt="Event Image"
+          class="w-64 mx-auto rounded-lg"
+        />
+        <h1 class="text-2xl font-bold mt-3"><%= event.name %></h1>
+        <p class="text-black font-semibold">Price: $<%= event.price %></p>
+      </div>
 
-    <div class="text-center">
-      <!-- Guest Event Details (populated from controller) -->
-      <h2 class="text-xl mb-3">Your Details</h2>
-      <p class="text-black">Guest Name: <%= guest.name %></p>
-      <p class="text-black">Phone Number: <%= guest.phoneNo %></p>
-      <p class="text-black">Email: <%= guest.email %></p>
-
-      <!-- Payment Buttons -->
-      <div class="flex justify-center mt-5">
-        <form action="/pay/zelle" method="POST">
-          <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-4 rounded-full">
+      <div class="text-center">
+        <!-- Guest Event Details (populated from controller) -->
+        <h2 class="text-xl mb-3">Your Details</h2>
+        <p class="text-black">Guest Name: <%= guest.username %></p>
+        <p class="text-black">Phone Number: <%= guest.phoneNo %></p>
+        <p class="text-black">Email: <%= guest.email %></p>
+        <div id="errorContainer" class="hidden text-red-600 mt-2"></div>
+        <!-- Payment Buttons -->
+        <div class="flex justify-center mt-5">
+          
+          <button
+            type="submit"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-4 rounded-full"
+          >
             Pay with Zelle
           </button>
-        </form>
-        <form action="/pay/stripe" method="POST">
-          <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full">
-            Pay with Stripe
+
+          <button
+            type="submit"
+            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
+            id="stripePayBtn"
+          >
+            <span id="stripeButtonText"> Pay with Stripe </span>
+            <span id="stripeLoading" class="hidden text-blue-600 mt-2">
+              Loading...
+            </span>
           </button>
-        </form>
+        </div>
       </div>
     </div>
-  </div>
-</body>
+    <script>
+      document
+        .getElementById("stripePayBtn")
+        .addEventListener("click", async (event) => {
+          event.preventDefault();
+          // Show loading indicator
+          document.getElementById("stripeLoading").classList.remove("hidden");
+          document.getElementById("stripeButtonText").classList.add("hidden");
+
+          try {
+            const response = await fetch(
+              "/v1/event/<%= event._id %>/guest/<%= guest._id %>/payment/stripe",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+
+            if (response.ok) {
+              // If the response is successful, extract redirect URL from response
+              const data = await response.json();
+              const redirectUrl = data.result.redirect; // Assuming the redirect URL key is 'redirectUrl'
+              // Redirect to the provided URL
+               window.location.href = redirectUrl; 
+            } else {
+              const errorContainer = document.getElementById("errorContainer");
+              errorContainer.innerText = `Error: ${response.statusText}`;
+              errorContainer.classList.remove("hidden");
+            }
+          } catch (error) {
+            console.error("Error initiating payment:", error);
+            // Handle error: Display an error message to the user
+            const errorContainer = document.getElementById("errorContainer");
+            errorContainer.innerText = `Error: ${error.message}`;
+            errorContainer.classList.remove("hidden");
+          } finally {
+            // Hide loading indicator and show the button text again
+            document.getElementById("stripeLoading").classList.add("hidden");
+            document
+              .getElementById("stripeButtonText")
+              .classList.remove("hidden");
+          }
+        });
+    </script>
+  </body>
 </html>

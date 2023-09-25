@@ -33,9 +33,9 @@ module.exports = async (req, res) => {
     const serverUrl = `${req.protocol}://${req.get("host")}`;
 
     // Generate a QR code for the event
-    const qrCodeData = `${serverUrl}/event/${event._id}`;
+    const qrCodeData = `${serverUrl}/v1/event/${event._id}/guest/invitation`;
     const qrCode = await qr.toDataURL(qrCodeData);
-    const invitationLink = `${serverUrl}/event/${event._id}`;
+    const invitationLink = `${serverUrl}/v1/event/${event._id}/guest/invitation`;
 
     return res.status(200).json({
       code: 200,
