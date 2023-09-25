@@ -2,7 +2,9 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const http = require("http");
+const path = require("path")
 const api = require("./routes/index");
+const viewsRoutes = require("./routes/views_routes");
 const sendSms = require("./utils/send_sms");
 require("dotenv/config");
 
@@ -11,15 +13,18 @@ const server = http.createServer(app);
 
 app.use(express.json());
 app.use(cors());
+app.use(express.static("public"));
+app.use(express.static("node_modules"));
 
-// app.set('view engine', 'ejs');
-// app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 app.get("/", function (req, res) {
   return res.send("Welcome to the apis");
 });
 
 app.use("/api", api);
+app.use("/v1",viewsRoutes)
 
 
 /* Connecting to the database. */

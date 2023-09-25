@@ -1,6 +1,7 @@
 const Users = require("../../models/Users");
 const createToken = require("../../utils/create-token");
 const sendErrorResponse = require("../../utils/send-error-response")
+const bcrypt = require("bcrypt");
 
 module.exports = async (req, res) => {
     try {
@@ -9,7 +10,9 @@ module.exports = async (req, res) => {
         if(!user){
             throw new Error("Users not found.please verify your OTP again.")
         }
-        user.password = password;
+        const salt = await bcrypt.genSalt(10);
+        const newPassword = await bcrypt.hash(password, salt);
+        user.password = newPassword;
         await user.save();
         const token = await createToken(user._id)
         return res.status(200).json({

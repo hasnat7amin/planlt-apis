@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Invitation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-200 flex items-center justify-center min-h-screen my-10">
+    <div class="bg-white p-10 rounded-lg shadow-lg w-1/2">
+      
+      <div class="text-center mb-5">
+        <img
+          src="<%= event.image %>"
+          alt="Event Image"
+          class="w-64 mx-auto rounded-lg"
+        />
+        <div class="">
+          <h1 class="text-2xl font-bold mt-3"><%= event.name %></h1>
+          <p class="text-gray-600 font-semibold">Date: <%= event.date %></p>
+          <p class="text-black font-semibold">
+            Location: <%= event.location.latitude %> , <%=
+            event.location.longitude %>
+          </p>
+          <p class="text-black font-semibold">
+            Event Type: <%= event.price > 0 ? 'Paid' : 'Free' %>
+          </p>
+          <p class="text-black font-semibold">
+            Event Price: <span class="font-bold"><%= event.price %> usd </span>
+          </p>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <p class="text-xl mb-3">You are invited to this event!</p>
+        <div
+         
+          class="flex flex-col items-center"
+        >
+          <div class="flex flex-col items-start">
+            <label for="input">Enter Your Full Name</label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              placeholder="Your Full Name"
+              class="rounded-lg px-4 py-2 mb-3 w-64 border"
+              required
+            />
+          </div>
+          <div class="flex flex-col items-start">
+            <label for="input">Enter Your Phone Number</label>
+            <input
+              type="tel"
+              id="phoneNo"
+              name="phoneNo"
+              placeholder="Your Phone Number"
+              class="rounded-lg px-4 py-2 mb-3 w-64 border"
+              required
+            />
+          </div>
+          <div class="flex flex-col items-start">
+            <label for="input">Enter Your Email Address</label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="example@gmail.com"
+              class="rounded-lg px-4 py-2 mb-3 w-64 border"
+              required
+            />
+          </div>
+          <!-- <div class="flex flex-col items-start mb-3">
+            <label class="mr-2">Are you coming to the event?</label>
+            <div>
+              <input type="radio" name="attendance" value="true" class="mr-2" />
+              <label for="yes">Yes</label>
+            </div>
+            <div>
+              <input
+                type="radio"
+                name="attendance"
+                value="false"
+                class="mr-2"
+              />
+              <label for="no">No</label>
+            </div>
+          </div> -->
+          <button
+            type="submit"
+            id="getTicketBtn"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+          >
+          <span id="buttonText">Get Ticket - <%= event.price > 0 ? event.price + " USD" : "Free" %></span>
+          <span id="loading" class="hidden text-blue-600 mt-2">Loading...</span>
+          </button>
+        </div>
+        <script>
+          document.getElementById('getTicketBtn').addEventListener('click', async () => {
+            // Show loading indicator
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('buttonText').classList.add('hidden');
+        
+            const name = document.getElementById('name').value;
+            const phoneNo = document.getElementById('phoneNo').value;
+            const email = document.getElementById('email').value;
+        
+            const payload = {
+              name,
+              phoneNo,
+              email,
+            };
+        
+            try {
+              const response = await fetch(`/v1/event/<%= event._id %>/guest/invitation`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+              });
+
+              
+              console.log(JSON.parse(response.body));
+        
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+        
+              
+            } catch (error) {
+              console.error('Error submitting invitation:', error);
+            } finally {
+              // Hide loading indicator and show the button text again
+              document.getElementById('loading').classList.add('hidden');
+              document.getElementById('buttonText').classList.remove('hidden');
+            }
+          });
+        </script>
+      </div>
+
+    </div>
+  </body>
+</html>

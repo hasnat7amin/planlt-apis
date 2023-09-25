@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Payment</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-200 flex items-center justify-center min-h-screen my-10">
+  <div class="bg-white p-10 rounded-lg shadow-lg w-1/2">
+    <div class="text-center mb-5">
+      <!-- Event Image, Name, and Price (populated from controller) -->
+      <img src="<%= event.image %>" alt="Event Image" class="w-64 mx-auto rounded-lg">
+      <h1 class="text-2xl font-bold mt-3"><%= event.name %></h1>
+      <p class="text-black font-semibold">Price: $<%= event.price %></p>
+    </div>
+
+    <div class="text-center">
+      <!-- Guest Event Details (populated from controller) -->
+      <h2 class="text-xl mb-3">Your Details</h2>
+      <p class="text-black">Guest Name: <%= guest.name %></p>
+      <p class="text-black">Phone Number: <%= guest.phoneNo %></p>
+      <p class="text-black">Email: <%= guest.email %></p>
+
+      <!-- Payment Buttons -->
+      <div class="flex justify-center mt-5">
+        <form action="/pay/zelle" method="POST">
+          <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-4 rounded-full">
+            Pay with Zelle
+          </button>
+        </form>
+        <form action="/pay/stripe" method="POST">
+          <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full">
+            Pay with Stripe
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
