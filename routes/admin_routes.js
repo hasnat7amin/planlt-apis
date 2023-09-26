@@ -19,8 +19,8 @@ router.put("/event/update",admin_authorize,upload.single("image"),admin_authoriz
 router.post("/event/:id/task", admin_authorize, AdminController.AddTask);
 router.put("/event/:eventId/task/:taskId", admin_authorize, AdminController.UpdateTask);
 router.post("/event/task/:taskId/item/add", admin_authorize, AdminController.AddTaskItem)
-router.put("/event/task/:taskId/item/update", admin_authorize, AdminController.UpdateTaskItem)
-
+router.put("/event/task/:taskId/item/:itemId/update", admin_authorize, AdminController.UpdateTaskItem)
+    
 // profile
 router.put("/profile/change-password", admin_authorize, AdminController.ChangePassword)
 router.put("/profile/change-information", admin_authorize, AdminController.PersonalInfo)

@@ -28,12 +28,15 @@
         <div id="errorContainer" class="hidden text-red-600 mt-2"></div>
         <!-- Payment Buttons -->
         <div class="flex justify-center mt-5">
-          
           <button
             type="submit"
+            id="btnPayPal"
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-4 rounded-full"
           >
-            Pay with Zelle
+            <span id="bthPayPalText"> Pay with PayPal </span>
+            <span id="btnPayPalLoading" class="hidden text-blue-600 mt-2">
+              Loading...
+            </span>
           </button>
 
           <button
@@ -74,7 +77,7 @@
               const data = await response.json();
               const redirectUrl = data.result.redirect; // Assuming the redirect URL key is 'redirectUrl'
               // Redirect to the provided URL
-               window.location.href = redirectUrl; 
+              window.location.href = redirectUrl;
             } else {
               const errorContainer = document.getElementById("errorContainer");
               errorContainer.innerText = `Error: ${response.statusText}`;
@@ -94,6 +97,54 @@
               .classList.remove("hidden");
           }
         });
-    </script>
+    
+        
+        document
+        .getElementById("btnPayPal")
+        .addEventListener("click", async (event) => {
+          event.preventDefault();
+          // Show loading indicator
+          document.getElementById("btnPayPalLoading").classList.remove("hidden");
+          document.getElementById("bthPayPalText").classList.add("hidden");
+
+          try {
+            const response = await fetch(
+              "/v1/event/<%= event._id %>/guest/<%= guest._id %>/payment/paypal",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+
+            if (response.ok) {
+              // If the response is successful, extract redirect URL from response
+              const data = await response.json();
+              const redirectUrl = data.result.redirect; // Assuming the redirect URL key is 'redirectUrl'
+              // Redirect to the provided URL
+              window.location.href = redirectUrl;
+            } else {
+              const errorContainer = document.getElementById("errorContainer");
+              errorContainer.innerText = `Error: ${response.statusText}`;
+              errorContainer.classList.remove("hidden");
+            }
+          } catch (error) {
+            console.error("Error initiating payment:", error);
+            // Handle error: Display an error message to the user
+            const errorContainer = document.getElementById("errorContainer");
+            errorContainer.innerText = `Error: ${error.message}`;
+            errorContainer.classList.remove("hidden");
+          } finally {
+            // Hide loading indicator and show the button text again
+            document.getElementById("btnPayPalLoading").classList.add("hidden");
+            document
+              .getElementById("bthPayPalText")
+              .classList.remove("hidden");
+          }
+        });
+    
+    
+      </script>
   </body>
 </html>

@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
     const event = await Event.findById(eventId);
 
     if (!event) {
-      throw new Error("Event not found")
+      throw new Error("Event not found");
     }
 
     // Create a new task associated with the event
@@ -36,26 +36,26 @@ module.exports = async (req, res) => {
 
     // Send notifications to assigned delegates via email and SMS
     for (const delegateId of assignedDelegates) {
-        const delegate = await Users.findById(delegateId); // Assuming you have a Users model
-  
-        if (delegate.email) {
-          // Send email notification
-          await sendEmail(
-            delegate.email,
-            "Task Assignment",
-            `You have been assigned a new task: ${taskName}`
-          );
-        }
-  
-        if (delegate.phoneNo) {
-          // Send SMS notification
-          await sendSms(
-            delegate.phoneNo,
-            `You have been assigned a new task: ${taskName}`
-          );
-        }
+      const delegate = await Users.findById(delegateId); // Assuming you have a Users model
+
+      if (delegate.email) {
+        // Send email notification
+        await sendEmail({
+          from: process.env.SMPT_MAIL,
+          email: delegate.email,
+          subject: "Task Assignment",
+          message: `You have been assigned a new task: ${taskName}`,
+        });
       }
-  
+
+      if (delegate.phoneNo) {
+        // Send SMS notification
+        await sendSms(
+           toPhoneNumber =delegate.phoneNo,
+          message = `You have been assigned a new task: ${taskName}`
+        );
+      }
+    }
 
     return res.status(201).json({
       code: 201,

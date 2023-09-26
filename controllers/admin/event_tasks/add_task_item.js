@@ -5,13 +5,22 @@ const sendSms = require("../../../utils/send_sms"); // Import your send-sms util
 
 module.exports = async (req, res) => {
   try {
-    const { taskId, itemName, itemsMeasureName, itemsMeasureQuantity, quantityNumber, quantitySize, status, time } = req.body;
+    const {
+      taskId,
+      itemName,
+      itemsMeasureName,
+      itemsMeasureQuantity,
+      quantityNumber,
+      quantitySize,
+      status,
+      time,
+    } = req.body;
 
     // Find the task by ID
     const task = await Task.findById(taskId);
 
     if (!task) {
-     throw new Error('Task not found');
+      throw new Error("Task not found");
     }
 
     // Create a new task item
@@ -37,11 +46,11 @@ module.exports = async (req, res) => {
 
       if (delegate.email) {
         // Send email notification
-        await sendEmail(
-          delegate.email,
-          "Task Item Created",
-          `A new task item "${itemName}" has been created for the task "${task.taskName}".`
-        );
+        await sendEmail({
+          email: delegate.email,
+          subject: "Task Item Created",
+          message: `A new task item "${itemName}" has been created for the task "${task.taskName}".`,
+        });
       }
 
       if (delegate.phoneNo) {

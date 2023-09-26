@@ -33,6 +33,7 @@ module.exports = async (req, res) => {
     else if(user && user.role === 'delegate' && !user.password) {
      
       user = await Users.updateOne({ email: email },{password:newPassword})
+      user = await Users.findOne({ email: email })
     }
     else if(user && user.role === 'delegate' && user.password) {
       throw new Error("This email's delegate is already exists. Please try a unique one."); 
@@ -56,7 +57,7 @@ module.exports = async (req, res) => {
     //   membershipExpiresAt.setMonth(membershipExpiresAt.getMonth() + 6);
     // }
 
-    
+    console.log(user)
     const tokenOtp = await generateOtp();
     const previousToken = await OTP.find({ userId: user._id });
     for (let pt of previousToken) {

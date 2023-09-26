@@ -30,6 +30,20 @@ const EventSchema = new mongoose.Schema({
     {
       phoneNo: String,
       email: String,
+      paymentStatus: {
+        type: String,
+        enum: ['pending', 'paid'],
+        default: 'pending',
+      },
+      isGoing: Boolean,
+      paymentMethod: {
+        type: String,
+        enum: ['paypal', 'stripe'],
+      },
+      paymentId: {
+        type: String,
+      },
+
     },
   ],
   stats:{

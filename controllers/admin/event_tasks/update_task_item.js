@@ -15,23 +15,24 @@ module.exports = async (req, res) => {
       if (!task) {
         throw new Error(`Task not found.`);
       }
-  
+      let found = false;
       // Find the task item within the task
-      const taskItem = task.items.id(itemId);
+      const taskItem = task.items.map((item)=>
+      {
+        if(item._id==itemId){
+          found = true;
+          Object.keys(req.body).map((key,index)=> {
+            console.log(key,index)
+            item[key] = req.body[key];
+          });
+        }
+      });
   
-      if (!taskItem) {
+      if (!found) {
         throw new Error(`Task item not found.`);
       }
   
-      // Update the task item properties based on the provided updateData
-    for (const key in updateData) {
-        if (updateData.hasOwnProperty(key)) {
-          if (taskItem[key] !== undefined) {
-            taskItem[key] = updateData[key];
-          }
-        }
-      }
-  
+    
       // Save the updated task to the database
       await task.save();
   
@@ -41,11 +42,11 @@ module.exports = async (req, res) => {
   
         if (delegate.email) {
           // Send email notification
-          await sendEmail(
-            delegate.email,
-            "Task Item Updated",
-            `Task item "${taskItem.itemName}" for the task "${task.taskName}" has been updated.`
-          );
+          await sendEmail({
+           email: delegate.email,
+            subject:"Task Item Updated",
+            message:`Task item "${taskItem.itemName}" for the task "${task.taskName}" has been updated.`
+        });
         }
   
         if (delegate.phoneNo) {
@@ -59,7 +60,7 @@ module.exports = async (req, res) => {
         code: 200,
         status: true,
         message: "Task item updated successfully.",
-        result: taskItem,
+        result: await Task.findById(taskId),
       });
     } catch (error) {
       return res.status(200).json({

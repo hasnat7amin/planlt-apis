@@ -56,8 +56,8 @@ module.exports = async (req, res) => {
         await sendEmail({
           email: user.email,
           from: process.env.SMPT_MAIL,
-          subject: "Event Invitation",
-          message: `You are invited to the event. Click this link to RSVP: ${invitationLink}`,
+          subject: "Event's Delegate Invitation",
+          message: `You are invited as a delegate to the event. \n Event Name: ${event.name}`,
         });
         console.log(" email sented") // Customize your email content
       }
@@ -65,8 +65,8 @@ module.exports = async (req, res) => {
         // Replace with your phone number field
         const invitationLink = `${serverUrl}/event/${event._id}`;
         await sendSms(
-          user.phoneNo,
-          `You are invited to the event. Click this link to RSVP: ${invitationLink}`
+          toPhoneNumber = user.phoneNo,
+          message = `You are invited as a delegate to the event. \n Event Name: ${event.name}`
         );
       }
 

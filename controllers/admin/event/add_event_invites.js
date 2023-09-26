@@ -23,10 +23,11 @@ module.exports = async (req, res) => {
     } else {
       // If no previous invitations, assign the new invitations directly
       event.invitations = invitations;
-    }
+     }
 
     // Update the 'invited' count in 'stats' field
     event.stats.invited = event.invitations.length;
+    event.stats.waiting = event.invitations.length;
 
     // Save the updated event to the database
     await event.save();
@@ -37,8 +38,8 @@ module.exports = async (req, res) => {
       // Send invitation links to all phone numbers
       for (const invitation of event.invitations) {
         const phoneNumber = invitation.phoneNo; // Replace with your phone number field
-        const invitationLink =  `${serverUrl}/v1/event/${event._id}/guest/invitation`; // Customize your invitation link
-        await sendSms(phoneNumber, `Event Invitation: ${invitationLink}`); // Customize your SMS content and implement sendSms function
+        const invitationLink =  `${serverUrl}/v1/event/${event._id}/phoneNo/invitation/${invitation._id}`; // Customize your invitation link
+        await sendSms(toPhoneNumber=phoneNumber,message= `You are Invited To The Event. \n Event Invitation: ${invitationLink}`); // Customize your SMS content and implement sendSms function
       }
     }
 

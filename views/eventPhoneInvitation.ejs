@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Event Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-200 flex items-center justify-center min-h-screen my-10">
+    <div class="bg-white p-10 rounded-lg shadow-lg md:w-1/2 w-full">
+      <div class="text-center mb-5">
+        <img
+          src="<%= event.image %>"
+          alt="Event Image"
+          class="w-64 mx-auto rounded-lg"
+        />
+        <h1 class="text-2xl font-bold mt-3"><%= event.name %></h1>
+        <p class="text-gray-600 font-semibold">Date: <%= event.date %></p>
+        <p class="text-black font-semibold">
+          Location: <%= event.location.latitude %> , <%=
+          event.location.longitude %>
+        </p>
+        <p class="text-black font-semibold">
+          Event Type: <%= event.price > 0 ? 'Paid' : 'Free' %>
+        </p>
+        <p class="text-black font-semibold">
+          Event Price: <span class="font-bold"><%= event.price %> usd </span>
+        </p>
+      </div>
+
+      <div class="text-center">
+        <h2 class="text-xl mb-3">Invitee Details</h2>
+        <p class="text-black">Phone Number: <%= invitation.phoneNo %></p>
+        <!-- Add more invitation details as needed -->
+        <div id="errorContainer" class="hidden text-red-600 mt-2"></div>
+        <!-- Payment or RSVP options based on event price -->
+        <% if (event.price > 0) { %>
+        <div class="flex justify-center mt-5">
+          <button
+            id="btnPayPal"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-4 rounded-full"
+          >
+            <span id="btnPayPalText">Pay with PayPal - <%= event.price %></span>
+            <span id="btnPayPalLoading" class="hidden text-blue-600 mt-2"
+              >Loading...</span
+            >
+          </button>
+          <script>
+            window.addEventListener("load", (event) => {
+              // Your event listener code here
+
+              document
+                .getElementById("btnPayPal")
+                .addEventListener("click", async (event) => {
+                  event.preventDefault();
+                  // Show loading indicator
+                  document
+                    .getElementById("btnPayPalLoading")
+                    .classList.remove("hidden");
+                  document
+                    .getElementById("btnPayPalText")
+                    .classList.add("hidden");
+
+                  try {
+                    const response = await fetch(
+                      `/v1/event/<%= event._id %>/phoneNo/<%= invitation._id %>/payment/paypal`,
+                      {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                      }
+                    );
+
+                    if (response.ok) {
+                      // If the response is successful, extract redirect URL from response
+                      const data = await response.json();
+                      const redirectUrl = data.result.redirect; // Assuming the redirect URL key is 'redirectUrl'
+                      console.log(redirectUrl);
+                      // Redirect to the provided URL
+                      window.location.href = redirectUrl;
+                    } else {
+                      const errorContainer =
+                        document.getElementById("errorContainer");
+                      errorContainer.innerText = `Error: ${response.statusText}`;
+                      errorContainer.classList.remove("hidden");
+                    }
+                  } catch (error) {
+                    console.error("Error submitting invitation:", error);
+                    // Display error to the user
+                    const errorContainer =
+                      document.getElementById("errorContainer");
+                    errorContainer.innerText = `Error: ${error.message}`;
+                    errorContainer.classList.remove("hidden");
+                  } finally {
+                    document
+                      .getElementById("btnPayPalLoading")
+                      .classList.add("hidden");
+                    document
+                      .getElementById("btnPayPalText")
+                      .classList.remove("hidden");
+                  }
+                });
+            });
+          </script>
+          <button
+            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
+            id="btnPayStripe"
+          >
+            <span id="btnStripeText">Pay with Stripe - <%= event.price %></span>
+            <span id="btnStripeLoading" class="hidden text-blue-600 mt-2"
+              >Loading...</span
+            >
+          </button>
+          <script>
+            window.addEventListener("load", (event) => {
+              // Your event listener code here
+
+              document
+                .getElementById("btnPayStripe")
+                .addEventListener("click", async (event) => {
+                  event.preventDefault();
+                  // Show loading indicator
+                  document
+                    .getElementById("btnStripeLoading")
+                    .classList.remove("hidden");
+                  document
+                    .getElementById("btnStripeText")
+                    .classList.add("hidden");
+
+                  try {
+                    const response = await fetch(
+                      `/v1/event/<%= event._id %>/phoneNo/<%= invitation._id %>/payment/stripe`,
+                      {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                      }
+                    );
+
+                    if (response.ok) {
+                      // If the response is successful, extract redirect URL from response
+                      const data = await response.json();
+                      const redirectUrl = data.result.redirect; // Assuming the redirect URL key is 'redirectUrl'
+                      console.log(redirectUrl);
+                      // Redirect to the provided URL
+                      window.location.href = redirectUrl;
+                    } else {
+                      const errorContainer =
+                        document.getElementById("errorContainer");
+                      errorContainer.innerText = `Error: ${response.statusText}`;
+                      errorContainer.classList.remove("hidden");
+                    }
+                  } catch (error) {
+                    console.error("Error submitting invitation:", error);
+                    // Display error to the user
+                    const errorContainer =
+                      document.getElementById("errorContainer");
+                    errorContainer.innerText = `Error: ${error.message}`;
+                    errorContainer.classList.remove("hidden");
+                  } finally {
+                    document
+                      .getElementById("btnStripeLoading")
+                      .classList.add("hidden");
+                    document
+                      .getElementById("btnStripeText")
+                      .classList.remove("hidden");
+                  }
+                });
+            });
+          </script>
+        </div>
+        <% } else { %>
+        <div class="flex flex-col items-center mb-3 mt-5">
+          <label class="mr-2 font-bold">Are you coming to the event?</label>
+          <div>
+            <input type="radio" name="attendance" value="true" class="mr-2" />
+            <label for="yes">Yes</label>
+          </div>
+          <div>
+            <input type="radio" name="attendance" value="false" class="mr-2" />
+            <label for="no">No</label>
+          </div>
+        </div>
+        <button
+          id="btnFreeSubmit"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+        >
+          <span id="btnSubmitText">Submit - Free</span>
+          <span id="btnSubmitLoading" class="hidden text-blue-600 mt-2"
+            >Loading...</span
+          >
+        </button>
+        <script>
+          window.addEventListener("load", (event) => {
+            // Your event listener code here
+
+            document
+              .getElementById("btnFreeSubmit")
+              .addEventListener("click", async (event) => {
+                event.preventDefault();
+                // Show loading indicator
+                console.log("clicked");
+                document
+                  .getElementById("btnSubmitLoading")
+                  .classList.remove("hidden");
+                document
+                  .getElementById("btnSubmitText")
+                  .classList.add("hidden");
+
+                const isGoing =
+                  document.querySelector('input[name="attendance"]:checked')
+                    .value === "true";
+
+                const payload = { isGoing };
+
+                try {
+                  const response = await fetch(
+                    `/v1/event/<%= event._id %>/phoneNo/invitation/<%= invitation._id %>/free`,
+                    {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify(payload),
+                    }
+                  );
+
+                  if (response.ok) {
+                    // If the response is successful, extract redirect URL from response
+                    const data = await response.json();
+                    const redirectUrl = data.result.redirect; // Assuming the redirect URL key is 'redirectUrl'
+                    console.log(redirectUrl);
+                    // Redirect to the provided URL
+                    window.location.href = redirectUrl;
+                  } else {
+                    const errorContainer =
+                      document.getElementById("errorContainer");
+                    errorContainer.innerText = `Error: ${response.statusText}`;
+                    errorContainer.classList.remove("hidden");
+                  }
+                } catch (error) {
+                  console.error("Error submitting invitation:", error);
+                  // Display error to the user
+                  const errorContainer =
+                    document.getElementById("errorContainer");
+                  errorContainer.innerText = `Error: ${error.message}`;
+                  errorContainer.classList.remove("hidden");
+                } finally {
+                  document
+                    .getElementById("btnSubmitLoading")
+                    .classList.add("hidden");
+                  document
+                    .getElementById("btnSubmitText")
+                    .classList.remove("hidden");
+                }
+              });
+          });
+        </script>
+        <% } %>
+      </div>
+    </div>
+  </body>
+</html>

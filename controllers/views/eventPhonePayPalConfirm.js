@@ -1,0 +1,60 @@
+const paypal = require("paypal-rest-sdk"); // Make sure to install the 'paypal-rest-sdk' package
+const Event = require("../../models/Event");
+const EventGuest = require("../../models/EventGuest");
+
+paypal.configure({
+    mode: "sandbox", // Change to 'live' for production
+    client_id:
+      "AZsF8qBgAY7yLySfYciIJ073vE1ckLWVkqnNqSFr8qez49LVizrcaGrf-J9_YZxYtu4QSGRC1vfVl6a6",
+    client_secret:
+      "EESXt6fxEtG5m3RipjHYXh9l-ZnWqBvS5e8ZHVmuxbCD5BABE-C8iycVW6mVDzimKH766FzDl_O892f8",
+  });
+module.exports = async (req, res) => {
+  try {
+    const { eventId, invitationId } = req.params;
+    const serverUrl = `${req.protocol}://${req.get("host")}`;
+
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.render("404", { errorDescription: "Event not found" });
+    }
+
+    const user = event.invitations.find(
+      (inv) => inv._id.toString() === invitationId
+    );
+
+    if (!user || !user.paymentId) {
+      return res.render("404", {
+        errorDescription: "User Not Found OR Payment Id don't exist",
+      });
+    }
+
+    // Retrieve the payment details from PayPal
+    paypal.payment.get(user.paymentId, async (error, payment) => {
+      if (error) {
+        console.error("Error getting PayPal payment details:", error);
+        return res.status(400).json({ error: "Internal Server Error" });
+      }
+
+      if (payment.state === "approved") {
+        event.stats.going = event.stats.going + 1;
+        event.stats.waiting = event.stats.waiting - 1;
+        event.invitations.map((invitation) => {
+          if (invitation._id == invitationId) {
+            invitation.paymentId = payment.id;
+            invitation.paymentStatus = "paid";
+            invitation.paymentMethod = "paypal";
+            invitation.isGoing = true;
+          }
+        });
+
+        await event.save();
+        return res.render("eventTicketSuccess");
+      } else {
+        return res.render("eventTicketCancel", { link: payment.links[0].href });
+      }
+    });
+  } catch (error) {
+    return res.render("404", { errorDescription: "Internal Server Error" });
+  }
+};

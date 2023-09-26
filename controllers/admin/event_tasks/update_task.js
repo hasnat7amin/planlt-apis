@@ -1,5 +1,8 @@
 const Event = require("../../../models/Event");
+const Users = require("../../../models/Users")
 const Task = require("../../../models/Task");
+const sendEmail = require("../../../utils/send-email"); 
+const sendSms = require("../../../utils/send_sms");
 
 module.exports = async (req, res) => {
   try {
@@ -38,16 +41,16 @@ module.exports = async (req, res) => {
   
         if (delegate.email) {
           // Send email notification
-          await sendEmail(
-            delegate.email,
-            "Task Updated",
-            `The task "${taskName}" has been updated. Status: ${status}`
-          );
+          await sendEmail({
+            email:delegate.email,
+            subject:"Task Updated",
+            message:`The task "${taskName}" has been updated.`
+        });
         }
   
         if (delegate.phoneNo) {
           // Send SMS notification
-          const smsMessage = `The task "${taskName}" has been updated. Status: ${status}`;
+          const smsMessage = `The task "${taskName}" has been updated.`;
           await sendSms(delegate.phoneNo, smsMessage);
         }
       }

@@ -25,7 +25,7 @@ const EventGuestSchema = new mongoose.Schema({
   },
   paymentMethod: {
     type: String,
-    enum: ['zelle', 'stripe'],
+    enum: ['paypal', 'stripe'],
   },
   paymentId: {
     type: String,
