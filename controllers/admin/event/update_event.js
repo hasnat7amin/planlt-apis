@@ -6,7 +6,7 @@ const qr = require("qrcode");
 
 module.exports = async (req, res) => {
   try {
-    const { eventId, name, price, date, latitude, longitude } = req.body;
+    const { eventId, name, price, date, address } = req.body;
     const { imageFile } = req; // Assuming image is sent as a file
 
     // Find the event by ID
@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
     if (name) event.name = name;
     if (price) event.price = price;
     if (date) event.date = date;
-    if (latitude && longitude) event.location = { latitude, longitude };
+    if (address) event.address = address;
     if (req.file) {
       // Update image if a new image file is provided
       const updatedImage = await addImage(req.file);
@@ -41,7 +41,10 @@ module.exports = async (req, res) => {
       code: 200,
       status: true,
       message: "Event details updated successfully.",
-      result: await Event.findById(eventId),
+      result: await Event.findById(eventId)
+        .populate("tasks") // Populate the tasks field with associated Task documents
+        .populate("userId") // Populate the userId field with associated User document
+        .populate("delegates"),
       invitationLink: invitationLink,
       qrCodeData: qrCodeData,
       qrCodeImage: qrCode,

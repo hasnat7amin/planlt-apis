@@ -10,7 +10,10 @@ module.exports = async (req, res) => {
       filter.date = { $gte: new Date() };
     }
 
-    let eventsQuery =  Event.find(filter);
+    let eventsQuery =  Event.find(filter)
+    .populate("tasks") // Populate the tasks field with associated Task documents
+    .populate("userId") // Populate the userId field with associated User document
+    .populate("delegates");
 
     if (sortByDate === 'true') {
       // Sort by date if requested

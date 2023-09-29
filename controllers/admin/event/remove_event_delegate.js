@@ -22,7 +22,10 @@ module.exports = async (req, res) => {
       code: 200,
       status: true,
       message: "Delegates removed successfully.",
-      result: event,
+      result: await Event.findById(eventId)
+      .populate("tasks") // Populate the tasks field with associated Task documents
+      .populate("userId") // Populate the userId field with associated User document
+      .populate("delegates"),
     });
   } catch (error) {
     return res.status(200).json({

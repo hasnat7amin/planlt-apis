@@ -6,8 +6,8 @@ const qr = require("qrcode");
 
 module.exports = async (req, res) => {
   try {
-    const { name, price, date, latitude, longitude } = req.body; // Assuming you send event data in the request body
-    const location = { latitude, longitude };
+    const { name, price, date, address } = req.body; // Assuming you send event data in the request body
+    // const location = { latitude, longitude };
 
     let image;
     if (req.file) {
@@ -17,7 +17,7 @@ module.exports = async (req, res) => {
       name,
       price,
       date,
-      location: location,
+      address: address,
       image: image,
       userId: req.user._id,
     });

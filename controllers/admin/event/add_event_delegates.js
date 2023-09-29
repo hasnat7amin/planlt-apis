@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
     let event = await Event.findById(eventId);
 
     if (!event) {
-      throw new Error("Event not found")
+      throw new Error("Event not found");
     }
 
     // Create an array to store user IDs for the delegates
@@ -59,14 +59,14 @@ module.exports = async (req, res) => {
           subject: "Event's Delegate Invitation",
           message: `You are invited as a delegate to the event. \n Event Name: ${event.name}`,
         });
-        console.log(" email sented") // Customize your email content
+        console.log(" email sented"); // Customize your email content
       }
       if (user.phoneNo) {
         // Replace with your phone number field
         const invitationLink = `${serverUrl}/event/${event._id}`;
         await sendSms(
-          toPhoneNumber = user.phoneNo,
-          message = `You are invited as a delegate to the event. \n Event Name: ${event.name}`
+          (toPhoneNumber = user.phoneNo),
+          (message = `You are invited as a delegate to the event. \n Event Name: ${event.name}`)
         );
       }
 
@@ -100,7 +100,10 @@ module.exports = async (req, res) => {
       code: 200,
       status: true,
       message: "Event updated successfully.",
-      result: event,
+      result: await Event.findById(eventId)
+        .populate("tasks") // Populate the tasks field with associated Task documents
+        .populate("userId") // Populate the userId field with associated User document
+        .populate("delegates"),
       invitationLink: invitationLink,
       qrCodeData: qrCodeData, // Include the QR code data in the response
       qrCodeImage: qrCode, // Include the QR code image in the response

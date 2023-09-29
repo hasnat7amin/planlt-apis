@@ -6,6 +6,7 @@ const UserSchema = new mongoose.Schema({
   username: {
     type: String,
     minlength: [2, "Minimum password length is 2 characters"],
+    default: null,
   },
   email: {
     type: String,

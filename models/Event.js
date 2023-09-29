@@ -17,6 +17,7 @@ const EventSchema = new mongoose.Schema({
     latitude: String,
     longitude: String,
   },
+  address: String,
   price: { type: Number },
   eventType: { type: String, enum: ["paid", "free"] },
   delegates: [

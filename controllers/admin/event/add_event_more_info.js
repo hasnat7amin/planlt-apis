@@ -20,7 +20,10 @@ module.exports = async (req, res) => {
       code: 200,
       status: true,
       message: "Event updated successfully.",
-      result: await Event.findById(req.params.id),
+      result: await Event.findById(eventId)
+      .populate("tasks") // Populate the tasks field with associated Task documents
+      .populate("userId") // Populate the userId field with associated User document
+      .populate("delegates"),
       invitationLink:invitationLink,
       qrCodeData: qrCodeData, // Include the QR code data in the response
       qrCodeImage: qrCode, // Include the QR code image in the response
