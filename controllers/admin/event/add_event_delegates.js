@@ -34,7 +34,8 @@ module.exports = async (req, res) => {
             // You can set other user properties here if needed
           });
         }
-      } else if (delegate.phoneNo) {
+      } 
+      if (delegate.phoneNo) {
         user = await Users.findOne({
           phoneNo: delegate.phoneNo,
           role: "delegate",

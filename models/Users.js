@@ -10,9 +10,8 @@ const UserSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: [false, "Please enter an email"],
-    unique: true,
-    lowercase: true,
+    // required: [false, "Please enter an email"],
+    // unique: false,
     validate: [validator.isEmail, "Please enter a valid email"],
   },
   password: {
@@ -40,7 +39,7 @@ const UserSchema = new mongoose.Schema({
   subscriptionSessionId: {
     type: String,
   },
-  subscriptionCheckoutUrl:{
+  subscriptionCheckoutUrl: {
     type: String,
   },
   membershipExpiresAt: {
@@ -53,8 +52,6 @@ const UserSchema = new mongoose.Schema({
   },
   bio: String,
 });
-
-
 
 /* This is a static method that is used to login a user. */
 UserSchema.statics.login = async function (email, password) {
