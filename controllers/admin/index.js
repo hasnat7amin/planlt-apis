@@ -17,6 +17,7 @@ module.exports = {
   // profile 
   ChangePassword: require("./profile/change_password"),
   PersonalInfo: require("./profile/personal_info"),
+  GetPersonalInfo: require("./profile/get_personal_info"),
   ChangeImage: require("./profile/upload_image"),
   CreateSubscrption: require("./profile/create_subscription"),
   ConfirmSubscription: require("./profile/confirm_subscription"),

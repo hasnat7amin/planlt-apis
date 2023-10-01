@@ -27,5 +27,6 @@ router.put("/profile/change-information", admin_authorize, AdminController.Perso
 router.put("/profile/change-image", admin_authorize,upload.single("image"),admin_authorize,AdminController.ChangeImage)
 router.get("/profile/create/subscription", admin_authorize,AdminController.CreateSubscrption)
 router.get("/:userId/subscriptions/success",AdminController.ConfirmSubscription)
+router.get('/profile/user-info',admin_authorize, AdminController.GetPersonalInfo)
 
 module.exports = router;
