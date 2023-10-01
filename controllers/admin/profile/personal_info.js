@@ -1,4 +1,6 @@
 const Users = require("../../../models/Users");
+const generateOtp = require("../../../utils/generate-otp");
+const sendEmail = require("../../../utils/send-email");
 
 module.exports = async (req, res) => {
   try {
@@ -24,6 +26,13 @@ module.exports = async (req, res) => {
     if (req.body.email) {
       user.email = req.body.email;
       user.isVerified = false;
+      const tokenOtp = await generateOtp();
+      await sendEmail({  
+        email: req.body.email,
+        from: process.env.SMPT_MAIL ,
+        subject: "Planit OTP",
+        message: `Hi! ${user.username}\nYour OTP is: ${tokenOtp}. Thanks for your cooperation.`,
+      });
     }
 
     if (req.body.bio) {
