@@ -10,6 +10,9 @@ module.exports = async (req, res) => {
         if(!user){
             throw new Error("Users not found.please verify your OTP again.")
         }
+        if (password.length<6 ) {
+            throw new Error("password length must be greater than 6 digits.");
+          }
         const salt = await bcrypt.genSalt(10);
         const newPassword = await bcrypt.hash(password, salt);
         user.password = newPassword;

@@ -18,24 +18,25 @@ module.exports = async (req, res, next) => {
       process.env.TOKEN_KEY,
       async (err, decodedToken) => {
         if (err) {
-          return res.status(400).json({
-            code: 400,
+          return res.status(200).json({
+            code: 200,
             success: false,
             message: "Failed to verify token.",
             result: { err },
           });
         } else {
           let user = await Users.findById(decodedToken.id);
-          const today = new Date();
-          if (
-            user.membership !== "none" &&
-            user.membershipExpiresAt > today
-          ) {
-            req.user = user;
-            next();
-          } else {
-            throw new Error("Your membership has expired or is not valid.");
+          if (!user) {
+            return res.status(200).json({
+              code: 200,
+              success: false,
+              message: "Failed to get the user.",
+              result: { err },
+            });
           }
+
+          req.user = user;
+          next();
         }
       }
     ).catch((err) => {

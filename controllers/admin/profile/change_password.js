@@ -21,8 +21,11 @@ module.exports = async (req, res) => {
     }
 
     // Check if the new password and confirm password match
-    if (newPassword !== confirmPassword) {
+    if (newPassword !== confirmPassword ) {
       throw new Error("New password and confirm password do not match.");
+    }
+    if (newPassword.length<6 ) {
+      throw new Error("password length must be greater than 6 digits.");
     }
 
     const salt = await bcrypt.genSalt(10);
