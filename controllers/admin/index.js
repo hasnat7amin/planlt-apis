@@ -7,12 +7,14 @@ module.exports = {
   GetEvents: require("./event/get_events"),
   SearchEvents: require("./event/search_events"),
   UpdateEvent: require("./event/update_event"),
+  GetEventById: require("./event/get_event_by_id"),
 
   // event task
   AddTask: require("./event_tasks/add_task"),
   AddTaskItem: require("./event_tasks/add_task_item"),
   UpdateTask: require("./event_tasks/update_task"),
   UpdateTaskItem: require("./event_tasks/update_task_item"),
+  GetEventTasks: require("./event_tasks/get_event_tasks"),
 
   // profile 
   ChangePassword: require("./profile/change_password"),

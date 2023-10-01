@@ -50,7 +50,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
-  bio: String,
+  bio: {
+    type: String,
+    default: null,
+  },
 });
 
 /* This is a static method that is used to login a user. */

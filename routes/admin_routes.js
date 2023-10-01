@@ -12,11 +12,13 @@ router.put("/event/:id/add/delegates", admin_authorize, AdminController.AddEvent
 router.put("/event/:id/add/invites", admin_authorize, AdminController.AddEventInvites);
 router.put("/event/:id/add/more_info", admin_authorize, AdminController.AddEventMoreInfo);
 router.get("/event/get",admin_authorize, AdminController.GetEvents),
+router.get("/event/get/:eventId", admin_authorize, AdminController.GetEventById);
 router.post("/event/search",admin_authorize, AdminController.SearchEvents)
 router.put("/event/update",admin_authorize,upload.single("image"),admin_authorize, AdminController.UpdateEvent)
 
 // event task
 router.post("/event/:id/task", admin_authorize, AdminController.AddTask);
+router.get("/event/:eventId/tasks", admin_authorize, AdminController.GetEventTasks);
 router.put("/event/:eventId/task/:taskId", admin_authorize, AdminController.UpdateTask);
 router.post("/event/task/:taskId/item/add", admin_authorize, AdminController.AddTaskItem)
 router.put("/event/task/:taskId/item/:itemId/update", admin_authorize, AdminController.UpdateTaskItem)
