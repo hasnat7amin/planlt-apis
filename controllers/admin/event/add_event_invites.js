@@ -37,9 +37,9 @@ module.exports = async (req, res) => {
     if (invitations) {
       // Send invitation links to all phone numbers
       for (const invitation of invitations) {
-        if (invitation.phoneNo) {
+        if (invitation["phoneNo"]) {
           const invitationId = event.invitations.find((i) => {
-            if (i.phoneNo === invitation.phoneNo) {return i._id};
+            if (i["phoneNo"] === invitation["phoneNo"]) {return i._id};
           });
           const phoneNumber = invitation.phoneNo; // Replace with your phone number field
           const invitationLink = `${serverUrl}/v1/event/${event._id}/phoneNo/invitation/${invitationId._id}`; // Customize your invitation link
@@ -50,7 +50,7 @@ module.exports = async (req, res) => {
         }
         if (invitation.email) {
           const invitationId = event.invitations.find((i) => {
-            if (i.email === invitation.email) return i._id;
+            if (i["email"] === invitation["email"]) return i._id;
           });
           const invitationLink = `${serverUrl}/v1/event/${event._id}/phoneNo/invitation/${invitationId._id}`; // Customize your invitation link
           await sendEmail({
