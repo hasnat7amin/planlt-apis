@@ -30,7 +30,11 @@
 
       <div class="text-center">
         <h2 class="text-xl mb-3">Invitee Details</h2>
+        <% if (invitation.phoneNo) { %>
         <p class="text-black">Phone Number: <%= invitation.phoneNo %></p>
+        <% } else { %>
+        <p class="text-black">Email: <%= invitation.email %></p>
+        <% } %>
         <!-- Add more invitation details as needed -->
         <div id="errorContainer" class="hidden text-red-600 mt-2"></div>
         <!-- Payment or RSVP options based on event price -->

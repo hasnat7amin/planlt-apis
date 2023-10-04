@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
     } else {
       // If no previous invitations, assign the new invitations directly
       event.invitations = invitations;
-     }
+    }
 
     // Update the 'invited' count in 'stats' field
     event.stats.invited = event.invitations.length;
@@ -37,15 +37,25 @@ module.exports = async (req, res) => {
     if (event.invitations) {
       // Send invitation links to all phone numbers
       for (const invitation of event.invitations) {
-        const phoneNumber = invitation.phoneNo; // Replace with your phone number field
-        const invitationLink =  `${serverUrl}/v1/event/${event._id}/phoneNo/invitation/${invitation._id}`; // Customize your invitation link
-        await sendSms(toPhoneNumber=phoneNumber,message= `You are Invited To The Event. \n Event Invitation: ${invitationLink}`); // Customize your SMS content and implement sendSms function
+        if (invitation.phoneNo) {
+          const phoneNumber = invitation.phoneNo; // Replace with your phone number field
+          const invitationLink = `${serverUrl}/v1/event/${event._id}/phoneNo/invitation/${invitation._id}`; // Customize your invitation link
+          await sendSms(
+            (toPhoneNumber = phoneNumber),
+            (message = `You are Invited To The Event. \n Event Invitation: ${invitationLink}`)
+          ); // Customize your SMS content and implement sendSms function
+        }
+        if(invitation.email){
+          const invitationLink = `${serverUrl}/v1/event/${event._id}/phoneNo/invitation/${invitation._id}`; // Customize your invitation link
+          await sendEmail({
+            email: invitation.email,
+            from: process.env.SMPT_MAIL,
+            subject: "Event Invitation",
+            message: `You are Invited To The Event. \n Event Invitation: ${invitationLink}`,
+          });
+        }
       }
     }
-
-    
-
-
 
     // Generate a QR code for the event
     const qrCodeData = `${serverUrl}/v1/event/${event._id}/guest/invitation`;
@@ -57,10 +67,10 @@ module.exports = async (req, res) => {
       status: true,
       message: "Event updated successfully.",
       result: await Event.findById(eventId)
-      .populate("tasks") // Populate the tasks field with associated Task documents
-      .populate("userId") // Populate the userId field with associated User document
-      .populate("delegates"),
-      invitationLink:invitationLink,
+        .populate("tasks") // Populate the tasks field with associated Task documents
+        .populate("userId") // Populate the userId field with associated User document
+        .populate("delegates"),
+      invitationLink: invitationLink,
       qrCodeData: qrCodeData, // Include the QR code data in the response
       qrCodeImage: qrCode, // Include the QR code image in the response
     });
