@@ -26,27 +26,33 @@ module.exports = async (req, res) => {
     }
 
     // Update the 'invited' count in 'stats' field
-    event.stats.invited = event.invitations.length;
-    event.stats.waiting = event.invitations.length;
+    event.stats.invited += invitations.length;
+    event.stats.waiting += invitations.length;
 
     // Save the updated event to the database
     await event.save();
 
     const serverUrl = `${req.protocol}://${req.get("host")}`;
 
-    if (event.invitations) {
+    if (invitations) {
       // Send invitation links to all phone numbers
-      for (const invitation of event.invitations) {
+      for (const invitation of invitations) {
         if (invitation.phoneNo) {
+          const invitationId = event.invitations.find((i) => {
+            if (i.phoneNo === invitation.phoneNo) {return i._id};
+          });
           const phoneNumber = invitation.phoneNo; // Replace with your phone number field
-          const invitationLink = `${serverUrl}/v1/event/${event._id}/phoneNo/invitation/${invitation._id}`; // Customize your invitation link
+          const invitationLink = `${serverUrl}/v1/event/${event._id}/phoneNo/invitation/${invitationId._id}`; // Customize your invitation link
           await sendSms(
             (toPhoneNumber = phoneNumber),
             (message = `You are Invited To The Event. \n Event Invitation: ${invitationLink}`)
           ); // Customize your SMS content and implement sendSms function
         }
-        if(invitation.email){
-          const invitationLink = `${serverUrl}/v1/event/${event._id}/phoneNo/invitation/${invitation._id}`; // Customize your invitation link
+        if (invitation.email) {
+          const invitationId = event.invitations.find((i) => {
+            if (i.email === invitation.email) return i._id;
+          });
+          const invitationLink = `${serverUrl}/v1/event/${event._id}/phoneNo/invitation/${invitationId._id}`; // Customize your invitation link
           await sendEmail({
             email: invitation.email,
             from: process.env.SMPT_MAIL,
