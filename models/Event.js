@@ -3,19 +3,19 @@ const mongoose = require("mongoose");
 const EventSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "User"
   },
   name: {
     type: String,
-    required: [true, "Enter event name"],
+    required: [true, "Enter event name"]
   },
   image: {
-    type: String,
+    type: String
   },
   date: { type: Date, required: true },
   location: {
     latitude: String,
-    longitude: String,
+    longitude: String
   },
   address: String,
   price: { type: Number },
@@ -23,43 +23,66 @@ const EventSchema = new mongoose.Schema({
   delegates: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
+      ref: "User"
+    }
   ],
-  eventBudget: { type: Number },
+  eventBudget: { type: Number, default: 0 },
   invitations: [
     {
       phoneNo: String,
       email: String,
       paymentStatus: {
         type: String,
-        enum: ['pending', 'paid'],
-        default: 'pending',
+        enum: ["pending", "paid"],
+        default: "pending"
       },
       isGoing: Boolean,
       paymentMethod: {
         type: String,
-        enum: ['paypal', 'stripe'],
+        enum: ["paypal", "stripe"]
       },
       paymentId: {
-        type: String,
-      },
-
-    },
+        type: String
+      }
+    }
   ],
-  stats:{
-    invited: { type: Number,default: 0},
-    going: { type: Number,default: 0},
-    notgoing: { type: Number,default: 0},
-    waiting: { type: Number,default: 0},
+  stats: {
+    invited: { type: Number, default: 0 },
+    going: { type: Number, default: 0 },
+    notgoing: { type: Number, default: 0 },
+    waiting: { type: Number, default: 0 }
   },
-  tasks:[
+  tasks: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Task",
+      ref: "Task"
+    }
+  ],
+  remainingBudget: { type: Number, default: 0 },
+  pendingReimbursement: { type: Number, default: 0 },
+  amountSpent: { type: Number, default: 0 },
+  reimbursement: [
+    {
+      itemName: String,
+      delegate:  {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+      },
+      quantityNumber: Number,
+      quantitySize: String,
+      uc: Number,
+      tc: Number,
+      notes: String,
+      reciept: String,
+      status: {
+        type: String,
+        enum: ["pending", "paid"],
+        default: "pending"
+      }
     }
   ]
 });
+
 
 const Event = mongoose.model("Event", EventSchema);
 

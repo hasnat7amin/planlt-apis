@@ -16,6 +16,10 @@ module.exports = {
   UpdateTaskItem: require("./event_tasks/update_task_item"),
   GetEventTasks: require("./event_tasks/get_event_tasks"),
 
+  // event supplies 
+  AddSupplies: require("./event_supplies/add_event_supplies"),
+  PayToSupplier: require("./event_supplies/pay_to_supplier"),
+
   // profile 
   ChangePassword: require("./profile/change_password"),
   PersonalInfo: require("./profile/personal_info"),

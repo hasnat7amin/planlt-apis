@@ -24,9 +24,23 @@ module.exports = async (req, res) => {
     for (const delegate of delegates) {
       // Create a new user based on the delegate's email or phone number
       let user;
+      if (delegate.phoneNo && delegate.email) {
+        user = await Users.findOne({
+          email: delegate.email,
+          role: "delegate",
+        });
+        if (!user) {
+          user = new Users({
+            phoneNo: delegate.phoneNo,
+            email: delegate.email,
+            role: "delegate",
+            // You can set other user properties here if needed
+          });
+        }
+      }
 
-      if (delegate.email) {
-        user = await Users.findOne({ email: delegate.email, role: "delegate" });
+      else if (delegate.email) {
+        user = await Users.findOne({ email: delegate.email,role: "delegate", });
         if (!user) {
           user = new Users({
             email: delegate.email,
@@ -35,7 +49,7 @@ module.exports = async (req, res) => {
           });
         }
       } 
-      if (delegate.phoneNo) {
+      else if (delegate.phoneNo) {
         user = await Users.findOne({
           phoneNo: delegate.phoneNo,
           role: "delegate",
@@ -48,6 +62,7 @@ module.exports = async (req, res) => {
           });
         }
       }
+     
 
       // Save the user to the database
       await user.save();
