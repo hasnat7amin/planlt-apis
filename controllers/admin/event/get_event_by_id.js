@@ -6,8 +6,10 @@ module.exports = async (req, res) => {
     const { eventId } = req.params;
 
     const event = await Event.findById(eventId)
-      .populate({ path: "tasks" }) 
-      .populate({ path: "tasks.assignedDelegates" }) 
+      .populate({ path: "tasks", populate: {
+        path: "assignedDelegate",
+      }, }) 
+      
       .populate("userId") 
       .populate("delegates");
 
