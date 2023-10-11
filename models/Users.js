@@ -54,6 +54,15 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  socketId:{
+    type: String,
+    default: null,
+  },
+  isOnline:{
+    type: Boolean,
+    default: false,
+  },
+
 });
 
 /* This is a static method that is used to login a user. */

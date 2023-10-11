@@ -1,4 +1,5 @@
 const express = require("express");
+const { Server } = require( "socket.io");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const http = require("http");
@@ -6,11 +7,21 @@ const path = require("path");
 const api = require("./routes/index");
 const viewsRoutes = require("./routes/views_routes");
 const sendSms = require("./utils/send_sms");
-const { initSocket } = require('./socket');
 require("dotenv/config");
 
 const app = express();
 const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+  },
+});
+
+
+require("./chat/index")(io)
+
+
 
 app.use(express.json());
 app.use(cors());
@@ -27,6 +38,10 @@ app.get("/", function (req, res) {
 app.use("/api", api);
 app.use("/v1", viewsRoutes);
 
+
+
+
+
 /* Connecting to the database. */
 mongoose.set("strictQuery", true);
 mongoose
@@ -36,7 +51,6 @@ mongoose
   })
   .then(() => {
     console.log("Connected to MongoDb");
-    initSocket(server);
   })
   .catch((err) => console.log(err));
 
