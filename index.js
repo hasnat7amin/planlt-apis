@@ -16,7 +16,7 @@ const io = new Server(server, {
   cors: {
     origin: '*',
   },
-});
+}); 
 
 
 require("./chat/index")(io)

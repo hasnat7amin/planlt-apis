@@ -6,10 +6,10 @@ const UserSchema = new mongoose.Schema({
   username: {
     type: String,
     minlength: [2, "Minimum password length is 2 characters"],
-    default: null,
+    default: null
   },
   email: {
-    type: String,
+    type: String
     // required: [false, "Please enter an email"],
     // unique: false,
     // validate: [validator.isEmail, "Please enter a valid email"],
@@ -17,52 +17,56 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     // required: [true, "Please enter a password"],
-    minlength: [6, "Minimum password length is 6 characters"],
+    minlength: [6, "Minimum password length is 6 characters"]
   },
   role: {
     type: String,
     required: [true, "Please enter your role"],
-    enum: ["delegate", "admin"],
+    enum: ["delegate", "admin"]
   },
   phoneNo: {
-    type: String,
+    type: String
   },
   isVerified: {
     type: Boolean,
-    default: false,
+    default: false
   },
   membership: {
     type: String,
     enum: ["none", "premium"],
-    default: "none",
+    default: "none"
   },
   subscriptionSessionId: {
-    type: String,
+    type: String
   },
   subscriptionCheckoutUrl: {
-    type: String,
+    type: String
   },
   membershipExpiresAt: {
     type: Date,
-    default: null,
+    default: null
   },
   image: {
     type: String,
-    default: null,
+    default: null
   },
   bio: {
     type: String,
-    default: null,
+    default: null
   },
-  socketId:{
+  socketId: {
     type: String,
-    default: null,
+    default: null
   },
-  isOnline:{
+ 
+  isOnline: {
     type: Boolean,
-    default: false,
+    default: false
   },
-
+  fcmToken: {
+    type: String,
+    default: null
+  }
 });
 
 /* This is a static method that is used to login a user. */
@@ -79,8 +83,8 @@ UserSchema.statics.login = async function (email, password) {
     user = await this.findOne({
       $or: [
         { email: email, role: "delegate" },
-        { phoneNo: email, role: "delegate" },
-      ],
+        { phoneNo: email, role: "delegate" }
+      ]
     });
   }
   if (user) {

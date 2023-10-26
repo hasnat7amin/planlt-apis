@@ -1,31 +1,40 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const ChatSchema = new mongoose.Schema(
   {
     sender: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
     chats: [
       {
         receiver: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
+          ref: 'User',
           required: true,
         },
         messages: [
           {
-            message: {
+            messageType: {
+              type: String,
+              enum: ['text', 'image', 'file', 'emoji', 'audio', 'document'],
+              required: true,
+            },
+            messageContent: {
               type: String,
               required: true,
             },
             userType: {
               type: String,
-              enum: ["sender", "receiver"],
+              enum: ['sender', 'receiver'],
               required: true,
             },
-            read: {
+            delivered: {
+              type: Boolean,
+              default: false,
+            },
+            seen: {
               type: Boolean,
               default: false,
             },
@@ -40,10 +49,10 @@ const ChatSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    collection: "Chat",
+    collection: 'Chat',
   }
 );
 
-const Chat = mongoose.model("Chat", ChatSchema);
+const Chat = mongoose.model('Chat', ChatSchema);
 
 module.exports = Chat;

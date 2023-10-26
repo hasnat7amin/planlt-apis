@@ -12,5 +12,4 @@ router.use("/delegates",delegates);
 router.use("/profile",profile)
  
 
-
 module.exports = router;

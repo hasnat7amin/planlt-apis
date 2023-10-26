@@ -27,4 +27,11 @@ module.exports = {
   ChangeImage: require("./profile/upload_image"),
   CreateSubscrption: require("./profile/create_subscription"),
   ConfirmSubscription: require("./profile/confirm_subscription"),
+
+  // upload 
+  UploadDocument: require("./profile/upload_docs"),
+
+
+  // fcm token
+  FcmToken: require("./profile/fcm_token"),
 };

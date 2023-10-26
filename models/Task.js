@@ -22,7 +22,7 @@
       },
     ],
     dueDate: {
-      type: Date,
+      type: String,
       required: true,
     },
     items: [

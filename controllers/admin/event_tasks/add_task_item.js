@@ -64,7 +64,10 @@ module.exports = async (req, res) => {
       code: 201,
       status: true,
       message: "Task item created successfully.",
-      result: taskItem,
+      result: {
+        task : await Task.findById(taskId),
+        item: taskItem
+      },
     });
   } catch (error) {
     return res.status(200).json({

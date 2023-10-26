@@ -14,4 +14,11 @@ router.get("/create/subscription", authorize,AdminController.CreateSubscrption)
 router.get("/:userId/subscriptions/success",AdminController.ConfirmSubscription)
 router.get('/user-info',authorize, AdminController.GetPersonalInfo)
 
-module.exports = router;
+
+router.post("/upload", authorize,upload.single("image"),authorize,AdminController.UploadDocument)
+
+
+router.post("/fcm-token",authorize,AdminController.FcmToken)
+  
+
+module.exports = router; 
