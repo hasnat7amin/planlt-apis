@@ -6,12 +6,6 @@ module.exports = async (req, res) => {
     const { eventId } = req.params;
 
     const event = await Event.findById(eventId)
-      .populate({ path: "tasks", populate: {
-        path: "assignedDelegates",
-      }, }) 
-      
-      .populate("userId") 
-      .populate("delegates");
 
     if (!event) {
       throw new Error("Event not found");
