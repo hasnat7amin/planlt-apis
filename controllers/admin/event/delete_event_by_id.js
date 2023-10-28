@@ -8,24 +8,25 @@ module.exports = async (req, res) => {
     const event = await Event.findById(eventId);
 
     if (!event) {
-      return res.status(404).json({
-        code: 404,
+      return res.status(200).json({
+        code: 200,
         status: false,
         message: "Event not found.",
       });
     }
 
     // Delete the event
-    await Event.deleteOne({_id:eventId});
+    const deleteEvent = await Event.findByIdAndDelete(eventId);
 
     return res.status(200).json({
       code: 200,
       status: true,
+      data: deleteEvent,
       message: "Event deleted successfully.",
     });
   } catch (error) {
-    return res.status(500).json({
-      code: 500,
+    return res.status(200).json({
+      code: 200,
       status: false,
       message: "Failed to delete the event.",
       error: error.message,
