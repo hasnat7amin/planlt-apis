@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
     }
 
     // Delete the event
-    await event.remove();
+    await event.delete();
 
     return res.status(200).json({
       code: 200,
