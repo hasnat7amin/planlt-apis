@@ -13,13 +13,13 @@ const EventSchema = new mongoose.Schema({
     type: String
   },
   date: { type: Date, required: true },
-  time: { type: String, required: true },
+  time: { type: String, required: true, default: "00:00:00" },
   location: {
     latitude: String,
     longitude: String
   },
   address: String,
-  description: String,
+  description: { type: String, default: "" },
   price: { type: Number },
   eventType: { type: String, enum: ["paid", "free"] },
   delegates: [
@@ -66,7 +66,7 @@ const EventSchema = new mongoose.Schema({
   reimbursement: [
     {
       itemName: String,
-      delegate:  {
+      delegate: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
       },
@@ -84,7 +84,6 @@ const EventSchema = new mongoose.Schema({
     }
   ]
 });
-
 
 const Event = mongoose.model("Event", EventSchema);
 
