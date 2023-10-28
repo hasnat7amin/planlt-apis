@@ -15,6 +15,7 @@ router.get("/event/get",admin_authorize, AdminController.GetEvents),
 router.get("/event/get/:eventId", admin_authorize, AdminController.GetEventById);
 router.post("/event/search",admin_authorize, admin_authorize)
 router.put("/event/update",admin_authorize,upload.single("image"),admin_authorize, AdminController.UpdateEvent)
+router.delete("/event/:id", admin_authorize, AdminController.DeleteEventById)
 
 // event suppliers
 router.post("/event/suppliers/add",admin_authorize,	AdminController.AddSupplies);

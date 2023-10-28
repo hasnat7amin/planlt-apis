@@ -13,11 +13,13 @@ const EventSchema = new mongoose.Schema({
     type: String
   },
   date: { type: Date, required: true },
+  time: { type: String, required: true },
   location: {
     latitude: String,
     longitude: String
   },
   address: String,
+  description: String,
   price: { type: Number },
   eventType: { type: String, enum: ["paid", "free"] },
   delegates: [

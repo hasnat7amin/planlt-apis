@@ -2,13 +2,10 @@ const Event = require("../../../models/Event");
 
 module.exports = async (req, res) => {
   try {
-    const { sortByDate, upcomingOnly } = req.query;
+    const { sortByDate, sortRecent } = req.query;
     const filter = { userId: req.user._id };
 
-    if (upcomingOnly === 'true') {
-      // Show only upcoming events (eventDate >= currentDate)
-      filter.date = { $gte: new Date() };
-    }
+  
 
     let eventsQuery =  Event.find(filter)
     .populate("tasks") // Populate the tasks field with associated Task documents
@@ -16,9 +13,15 @@ module.exports = async (req, res) => {
     .populate("delegates");
 
     if (sortByDate === 'true') {
-      // Sort by date if requested
-      eventsQuery =  eventsQuery.sort({ date: 1 });
+      // Sort by event date in ascending order
+      eventsQuery = eventsQuery.sort({ date: 1 });
     }
+
+    if (sortRecent === 'true') {
+      // Sort by event creation date in descending order (recent events first)
+      eventsQuery = eventsQuery.sort({ createdAt: -1 });
+    }
+
 
     const events = await eventsQuery.exec();
 

@@ -6,7 +6,7 @@ const sendSms = require("../../../utils/send_sms");
 
 module.exports = async (req, res) => {
   try {
-    const { taskName, assignedDelegates, status, dueDate } = req.body;
+    const { taskName, assignedDelegates, status, dueDate,dueTime } = req.body;
     const eventId = req.params.id; // Assuming you pass the event ID as a parameter
 
     // Find the event by ID
@@ -23,6 +23,7 @@ module.exports = async (req, res) => {
       assignedDelegates,
       status,
       dueDate,
+      dueTime
     });
 
     // Save the task to the database

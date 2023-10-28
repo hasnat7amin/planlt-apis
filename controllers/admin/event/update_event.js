@@ -6,7 +6,7 @@ const qr = require("qrcode");
 
 module.exports = async (req, res) => {
   try {
-    const { eventId, name, price, date, address } = req.body;
+    const { eventId, name, price, date, address,description,time } = req.body;
     const { imageFile } = req; // Assuming image is sent as a file
 
     // Find the event by ID
@@ -21,6 +21,8 @@ module.exports = async (req, res) => {
     if (price) event.price = price;
     if (date) event.date = date;
     if (address) event.address = address;
+    if(description) event.description = description;
+    if(time) event.time = time;
     if (req.file) {
       // Update image if a new image file is provided
       const updatedImage = await addImage(req.file);

@@ -6,7 +6,7 @@ const sendSms = require("../../../utils/send_sms");
 
 module.exports = async (req, res) => {
   try {
-    const { taskName, assignedDelegates, status, dueDate } = req.body;
+    const { taskName, assignedDelegates, status, dueDate,dueTime } = req.body;
     const eventId = req.params.eventId; // Assuming you pass the event ID as a parameter
     const taskId = req.params.taskId; // Assuming you pass the task ID as a parameter
 

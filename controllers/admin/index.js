@@ -8,6 +8,7 @@ module.exports = {
   SearchEvents: require("./event/search_events"),
   UpdateEvent: require("./event/update_event"),
   GetEventById: require("./event/get_event_by_id"),
+  DeleteEventById: require("./event/delete_event_by_id"),
 
   // event task
   AddTask: require("./event_tasks/add_task"),

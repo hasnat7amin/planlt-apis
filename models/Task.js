@@ -25,6 +25,10 @@
       type: String,
       required: true,
     },
+    dueTime: {
+      type: String,
+      required: true,
+    },
     items: [
       {
         itemName: String,

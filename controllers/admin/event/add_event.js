@@ -6,7 +6,7 @@ const qr = require("qrcode");
 
 module.exports = async (req, res) => {
   try {
-    const { name, price, date, address } = req.body; // Assuming you send event data in the request body
+    const { name, price, date, address,description,time } = req.body; // Assuming you send event data in the request body
     // const location = { latitude, longitude };
 
     let image;
@@ -16,9 +16,11 @@ module.exports = async (req, res) => {
     const event = new Event({
       name,
       price,
+      time,
       date,
       address: address,
       image: image,
+      description,
       userId: req.user._id,
     });
 
