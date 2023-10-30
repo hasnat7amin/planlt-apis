@@ -16,6 +16,7 @@ module.exports = {
   UpdateTask: require("./event_tasks/update_task"),
   UpdateTaskItem: require("./event_tasks/update_task_item"),
   GetEventTasks: require("./event_tasks/get_event_tasks"),
+  GetTaskItems: require("./event_tasks/get_task_items"),
 
   // event supplies 
   AddSupplies: require("./event_supplies/add_event_supplies"),

@@ -25,6 +25,7 @@ router.post("/event/suppliers/pay",admin_authorize,	AdminController.PayToSupplie
 // event task
 router.post("/event/:id/task", admin_authorize, AdminController.AddTask);
 router.get("/event/:eventId/tasks", admin_authorize, AdminController.GetEventTasks);
+router.get("/event/:eventId/tasks/:taskId/items", admin_authorize, AdminController.GetTaskItems);
 router.put("/event/:eventId/task/:taskId", admin_authorize, AdminController.UpdateTask);
 router.post("/event/task/:taskId/item/add", admin_authorize, AdminController.AddTaskItem)
 router.put("/event/task/:taskId/item/:itemId/update", admin_authorize, AdminController.UpdateTaskItem)
