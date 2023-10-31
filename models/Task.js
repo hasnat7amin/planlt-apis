@@ -27,11 +27,11 @@
     ],
     dueDate: {
       type: String,
-      required: true,
+      // required: true,
     },
     dueTime: {
       type: String,
-      required: true,
+      // required: true,
     },
     items: [
       {
