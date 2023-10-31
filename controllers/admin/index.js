@@ -29,6 +29,7 @@ module.exports = {
   ChangeImage: require("./profile/upload_image"),
   CreateSubscrption: require("./profile/create_subscription"),
   ConfirmSubscription: require("./profile/confirm_subscription"),
+  CancelSubscription: require("./profile/cancel_subscription"),
 
   // upload 
   UploadDocument: require("./profile/upload_docs"),

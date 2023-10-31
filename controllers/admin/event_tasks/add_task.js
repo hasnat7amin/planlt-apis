@@ -9,6 +9,23 @@ module.exports = async (req, res) => {
     const { taskName, assignedDelegates, status, dueDate,dueTime } = req.body;
     const eventId = req.params.id; // Assuming you pass the event ID as a parameter
 
+    const user = req.user;
+
+    // Check the user's membership status
+    if (user.membership !== "premium") {
+      // If the user is not in premium membership, check the number of events they have
+      const taskCount = await Task.countDocuments({ userId: user._id });
+      if (taskCount >= 3) {
+        return res.status(200).json({
+          code: 200,
+          status: false,
+          message: "You are in free membership and has reached the task limit (3 events).",
+          error: "You are in free membership and has reached the task limit (3 events).",
+        });
+      }
+    }
+
+
     // Find the event by ID
     const event = await Event.findById(eventId);
 
@@ -18,6 +35,7 @@ module.exports = async (req, res) => {
 
     // Create a new task associated with the event
     const task = new Task({
+      userId:req.user._id,
       eventId,
       taskName,
       assignedDelegates,

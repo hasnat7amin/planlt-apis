@@ -46,6 +46,10 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: null
   },
+  subscriptionStartDate:{
+    type: Date,
+    default: null
+  },
   image: {
     type: String,
     default: null

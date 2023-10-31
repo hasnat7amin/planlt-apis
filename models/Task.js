@@ -1,6 +1,10 @@
   const mongoose = require("mongoose");
 
   const TaskSchema = new mongoose.Schema({
+    userId:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    },
     eventId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Event", // Reference to the Event model to associate the task with an event

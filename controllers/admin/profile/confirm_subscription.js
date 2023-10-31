@@ -14,10 +14,12 @@ module.exports = async (req, res) => {
     );
 
     if (session && session.payment_status === "paid") {
+      const startDate = new Date();
       await Users.findByIdAndUpdate(userId, {
         subscriptionSessionId: session.id,
         subscriptionCheckoutUrl: null,
-        membership: "premium"
+        membership: "premium",
+        subscriptionStartDate: startDate,
       });
     }
    

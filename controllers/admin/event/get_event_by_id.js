@@ -7,7 +7,8 @@ module.exports = async (req, res) => {
 
     const event = await Event.findById(eventId).populate({path:"tasks",populate:"assignedDelegates"}) 
     .populate("userId")
-    .populate("delegates");
+    .populate("delegates")
+    .populate({path:"reimbursement",populate:"delegate"});
 
     if (!event) {
       throw new Error("Event not found");

@@ -37,6 +37,7 @@ router.put("/profile/change-password", admin_authorize, AdminController.ChangePa
 router.put("/profile/change-information", admin_authorize, AdminController.PersonalInfo)
 router.put("/profile/change-image", admin_authorize,upload.single("image"),admin_authorize,AdminController.ChangeImage)
 router.get("/profile/create/subscription", admin_authorize,AdminController.CreateSubscrption)
+router.get("/profile/cancel/subscription", admin_authorize,AdminController.CancelSubscription)
 router.get("/:userId/subscriptions/success",AdminController.ConfirmSubscription)
 router.get('/profile/user-info',admin_authorize, AdminController.GetPersonalInfo)
 
