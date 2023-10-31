@@ -75,7 +75,7 @@ const EventSchema = new mongoose.Schema({
       uc: Number,
       tc: Number,
       notes: String,
-      reciept: String,
+      reciept: { type: String, default: null },
       status: {
         type: String,
         enum: ["pending", "paid"],
