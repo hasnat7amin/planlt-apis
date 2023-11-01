@@ -12,6 +12,7 @@ router.put("/change-information", authorize, AdminController.PersonalInfo)
 router.put("/change-image", authorize,upload.single("image"),authorize,AdminController.ChangeImage)
 router.get("/create/subscription", authorize,AdminController.CreateSubscrption)
 router.get("/:userId/subscriptions/success",AdminController.ConfirmSubscription)
+router.get("/cancel/subscription", admin_authorize,AdminController.CancelSubscription)
 router.get('/user-info',authorize, AdminController.GetPersonalInfo)
 
 
