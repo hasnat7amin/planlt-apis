@@ -8,6 +8,8 @@ module.exports = async (req, res) => {
     const { _id } = req.user;
     const user = await Users.findById(req.user._id);
 
+
+
     // Check if the user has an active subscription
     if (!user["subscriptionSessionId"]) {
       return res.status(200).json({
@@ -17,8 +19,12 @@ module.exports = async (req, res) => {
       });
     }
 
+    const session = await stripe.checkout.sessions.retrieve(
+      user.subscriptionSessionId
+    );
+
     // Use the Stripe API to cancel the user's subscription
-    await stripe.subscriptions.update(user["subscriptionSessionId"], {
+    await stripe.subscriptions.update(session.subscription, {
       cancel_at_period_end: true,
     });
 
