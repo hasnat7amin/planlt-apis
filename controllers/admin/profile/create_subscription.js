@@ -9,7 +9,7 @@ module.exports = async (req, res) => {
 
     const user = await Users.findById(req.user._id);
 
-    if (!user.subscriptionSessionId) {
+    if (user.membership=="none") {
       const session = await stripe.checkout.sessions.create({
         mode: "subscription",
         payment_method_types: ["card"],
@@ -27,44 +27,6 @@ module.exports = async (req, res) => {
         subscriptionSessionId: session.id,
         subscriptionCheckoutUrl: session.url,
       });
-    } else {
-      const session = await stripe.checkout.sessions.retrieve(
-        user.subscriptionSessionId
-      );
-
-      if (!session) {
-        const session = await stripe.checkout.sessions.create({
-          mode: "subscription",
-          payment_method_types: ["card"],
-          line_items: [
-            {
-              price: "price_1NsTZtKMt522YDQT8ncljhhy",
-              quantity: 1,
-            },
-          ],
-          success_url: `${serverUrl}/api/admin/${req.user._id}/subscriptions/success`,
-          //   cancel_url: 'http://localhost:5173/cancel',
-        });
-
-        await Users.findByIdAndUpdate(req.user._id, {
-          subscriptionSessionId: session.id,
-          subscriptionCheckoutUrl: session.url,
-        });
-      }
-
-      if (session && session.payment_status !== "paid") {
-        await Users.findByIdAndUpdate(req.user._id, {
-          subscriptionSessionId: session.id,
-          subscriptionCheckoutUrl: session.url,
-        });
-      }
-      if (session && session.payment_status === "paid") {
-        return res.status(200).json({
-          code: 200,
-          status: true,
-          message: "You already Subscribed the plan successfully.",
-        });
-      }
     }
 
     return res.status(200).json({
