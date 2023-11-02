@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
       userId: user._id,
       otp: tokenOtp,
     });
-    if (user.role === 'delegate' && phoneNo) {
+    if (user.role === 'delegate' && user.phoneNo) {
       // If the user is a delegate and has a phone number, send OTP to phoneNo
       await sendSms(phoneNo, `Your OTP is: ${tokenOtp}. Thanks for your cooperation.`);
     } else {
