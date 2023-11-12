@@ -7,6 +7,8 @@ const path = require("path");
 const api = require("./routes/index");
 const viewsRoutes = require("./routes/views_routes");
 const sendSms = require("./utils/send_sms");
+const functions = require("firebase-functions")
+
 require("dotenv/config");
 
 const app = express();
@@ -61,3 +63,5 @@ server.listen(port, () => {
 });
 
 module.exports = app;
+
+exports.api = functions.https.onRequest(app)

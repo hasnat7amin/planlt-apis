@@ -9,8 +9,8 @@ module.exports = async (req, res) => {
       delegates: { $in: [req.user._id] },
       ...(upcomingOnly === 'true' && { date: { $gte: new Date() } })
     })
-      .populate("tasks") // Populate the tasks field with associated Task documents
-      .populate("userId") // Populate the userId field with associated User document
+      .populate("tasks") 
+      .populate("userId") 
       .populate("delegates")
       .sort(sortByDate === 'true' ? { date: 1 } : {});
 

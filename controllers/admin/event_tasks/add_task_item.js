@@ -60,13 +60,15 @@ module.exports = async (req, res) => {
       }
     }
 
+   const newTasks = await Task.findById(taskId)
+
     return res.status(201).json({
       code: 201,
       status: true,
       message: "Task item created successfully.",
       result: {
-        task : await Task.findById(taskId),
-        item: taskItem
+        task : newTasks,
+        item: newTasks["items"][newTasks["items"].length-1]
       },
     });
   } catch (error) {
