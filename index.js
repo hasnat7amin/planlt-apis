@@ -64,4 +64,4 @@ server.listen(port, () => {
 
 module.exports = app;
 
-exports.api = functions.https.onRequest(app)
+// exports.api = functions.https.onRequest(app)
