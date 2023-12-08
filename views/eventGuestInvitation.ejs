@@ -24,9 +24,12 @@
           <p class="text-black font-semibold">
             Event Type: <%= event.price > 0 ? 'Paid' : 'Free' %>
           </p>
+          <% if (event.price > 0) { %>
           <p class="text-black font-semibold">
-            Event Price: <span class="font-bold"><%= event.price %> usd </span>
+            Event Price:
+            <span class="font-bold"> <%= event.price %> USD </span>
           </p>
+          <% } %>
         </div>
       </div>
 
@@ -98,7 +101,6 @@
             >
           </button>
         </div>
-       
       </div>
     </div>
     <script>
@@ -115,39 +117,39 @@
           const email = document.getElementById("email").value;
 
           if (name == "" || phoneNo == "" || email == "") {
-            const errorContainer =
-              document.getElementById("errorContainer");
-            errorContainer.innerText = `please fill all the fields`;
+            const errorContainer = document.getElementById("errorContainer");
+            errorContainer.innerText = `Please fill all the fields`;
             errorContainer.classList.remove("hidden");
             document.getElementById("loading").classList.add("hidden");
-            document
-              .getElementById("buttonText")
-              .classList.remove("hidden");
+            document.getElementById("buttonText").classList.remove("hidden");
             return;
           }
 
           const payload = {
             name,
             phoneNo,
-            email,
+            email
           };
 
           try {
-            const response = await fetch(`/v1/event/<%= event._id %>/guest/invitation`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(payload),
-            });
-          
+            const response = await fetch(
+              `/v1/event/<%= event._id %>/guest/invitation`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+              }
+            );
+
             if (response.ok) {
               // If the response is successful, extract redirect URL from response
               const data = await response.json();
               const redirectUrl = data.result.redirect; // Assuming the redirect URL key is 'redirectUrl'
-              console.log(redirectUrl)
+              console.log(redirectUrl);
               // Redirect to the provided URL
-               window.location.href = redirectUrl; 
+              window.location.href = redirectUrl;
             } else {
               const errorContainer = document.getElementById("errorContainer");
               errorContainer.innerText = `Error: ${response.statusText}`;
@@ -163,9 +165,6 @@
             document.getElementById("loading").classList.add("hidden");
             document.getElementById("buttonText").classList.remove("hidden");
           }
-          
-
-         
         });
     </script>
   </body>
