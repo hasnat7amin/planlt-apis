@@ -3,7 +3,7 @@ const addImage = require("../../../utils/addImage"); // Import your image utilit
 
 module.exports = async (req, res) => {
   try {
-    const { eventId, itemName, quantityNumber, quantitySize, uc, tc, notes } = req.body;
+    const { eventId, itemName, quantityNumber, quantitySize, uc, tc, notes,amount } = req.body;
 
     // Find the event by ID
     const event = await Event.findById(eventId);
@@ -22,6 +22,7 @@ module.exports = async (req, res) => {
     const newReimbursement = {
       itemName,
       delegate: req.user._id,
+      amount,
       quantityNumber,
       quantitySize,
       uc,

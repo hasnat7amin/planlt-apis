@@ -70,6 +70,7 @@ const EventSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
       },
+      amount:Number,
       quantityNumber: Number,
       quantitySize: String,
       uc: Number,
