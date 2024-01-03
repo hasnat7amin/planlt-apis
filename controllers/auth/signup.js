@@ -9,7 +9,7 @@ const bcrypt = require("bcrypt");
 
 module.exports = async (req, res) => {
   try {
-    const { email, password, phoneNo } = req.body;
+    const { email, password, phoneNo, username } = req.body;
 
     const salt = await bcrypt.genSalt(10);
     const newPassword = await bcrypt.hash(password, salt);
@@ -40,6 +40,7 @@ module.exports = async (req, res) => {
     }
     else{
       user = await Users.create({
+        username: username,
         email,
         password:newPassword,
         role:"admin",
