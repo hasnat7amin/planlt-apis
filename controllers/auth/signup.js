@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
 
     else if(user && user.role === 'delegate' && !user.password) {
      
-      user = await Users.updateOne({ email: email },{password:newPassword})
+      user = await Users.updateOne({ email: email },{password:newPassword,username:username})
       user = await Users.findOne({ email: email })
     }
     else if(user && user.role === 'delegate' && user.password) {
