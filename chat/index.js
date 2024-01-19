@@ -522,6 +522,18 @@ module.exports = async (io) => {
         }
       });
 
+      // New socket event to get users by phone numbers
+      socket.on("get-users-by-phone-numbers", async (options) => {
+        try {
+          const users = await Users.find({ phoneNo: { $in: options.phoneNumbers } })
+            .select("-password");
+
+          socket.emit("receive-users-by-phone-numbers", users);
+        } catch (error) {
+          console.error("Error in getting users by phone numbers:", error);
+        }
+      });
+
       // disconnect user
       socket.on("disconnect", async () => {
         try {
