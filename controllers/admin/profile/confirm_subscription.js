@@ -12,10 +12,12 @@ module.exports = async (req, res) => {
     const session = await stripe.checkout.sessions.retrieve(
       user.subscriptionSessionId
     );
-
-    const expiresAtTimestamp = session.expires_at;
-    const expiresAtDate = new Date(expiresAtTimestamp * 1000); // Convert seconds to milliseconds
-    const expiresAtString = expiresAtDate.toLocaleString(); 
+    const expiresAtString = null;
+    if (session) {
+      const expiresAtTimestamp = session.expires_at;
+      const expiresAtDate = new Date(expiresAtTimestamp * 1000); // Convert seconds to milliseconds
+      expiresAtString = expiresAtDate.toLocaleString();
+    }
 
     if (session && session.payment_status === "paid") {
       const startDate = new Date();
@@ -24,10 +26,10 @@ module.exports = async (req, res) => {
         subscriptionCheckoutUrl: null,
         membership: "premium",
         subscriptionStartDate: startDate,
-        membershipExpiresAt:expiresAtString
+        membershipExpiresAt: expiresAtString
       });
     }
-   
+
 
     // await Users.findByIdAndUpdate(req.user._id,{
     //     subscriptionSessionId: session.id,
@@ -35,11 +37,11 @@ module.exports = async (req, res) => {
     // })
 
     return res.status(200).json({
-        code: 200,
-        status: true,
-        result: await Users.findById(userId),
-        message: "Subscribed the plan successfully.",
-      });
+      code: 200,
+      status: true,
+      result: await Users.findById(userId),
+      message: "Subscribed the plan successfully.",
+    });
   } catch (error) {
     return res.status(200).json({
       code: 200,
