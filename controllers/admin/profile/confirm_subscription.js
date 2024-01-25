@@ -13,6 +13,10 @@ module.exports = async (req, res) => {
       user.subscriptionSessionId
     );
 
+    const expiresAtTimestamp = session.expires_at;
+    const expiresAtDate = new Date(expiresAtTimestamp * 1000); // Convert seconds to milliseconds
+    const expiresAtString = expiresAtDate.toLocaleString(); 
+
     if (session && session.payment_status === "paid") {
       const startDate = new Date();
       await Users.findByIdAndUpdate(userId, {
@@ -20,6 +24,7 @@ module.exports = async (req, res) => {
         subscriptionCheckoutUrl: null,
         membership: "premium",
         subscriptionStartDate: startDate,
+        membershipExpiresAt:expiresAtString
       });
     }
    
