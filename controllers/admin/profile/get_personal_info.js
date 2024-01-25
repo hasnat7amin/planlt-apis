@@ -21,6 +21,7 @@ module.exports = async (req, res) => {
     let expiresAtString = null;
     let subscription = null;
     let currentPeriodEnd = null;
+    let planInterval = null;
     if (user.subscriptionSessionId) {
       checkoutSession = await stripe.checkout.sessions.retrieve(user.subscriptionSessionId);
       if (checkoutSession) {
@@ -32,7 +33,7 @@ module.exports = async (req, res) => {
         if(subscription) {
           const currentPeriodEndTimestamp = subscription.current_period_end;
            currentPeriodEnd = new Date(currentPeriodEndTimestamp * 1000).toLocaleString();
-    
+          planInterval = subscription.plan?.interval;
         }
       }
 
@@ -43,7 +44,7 @@ module.exports = async (req, res) => {
       code: 200,
       status: true,
       message: "User get successfully.",
-      result: { user,currentPeriodEnd},
+      result: { user,currentPeriodEnd,planInterval },
     });
   } catch (error) {
     return res.status(200).json({
