@@ -15,7 +15,7 @@ module.exports = async (req, res) => {
         payment_method_types: ["card"],
         line_items: [
           {
-            price: req.params.type==="yearly"?"price_1Oc0DmKMt522YDQTmwCriy9Y":req.params.type==="monthly"&&"price_1Oc0C4KMt522YDQTnGxn7bWa",
+            price: req.params.type==="yearly"?"price_1OcLIfKMt522YDQTHEdfMGrU":req.params.type==="monthly"&&"price_1OcLHtKMt522YDQTSoNK5rSH",
             quantity: 1,
           },
         ],
