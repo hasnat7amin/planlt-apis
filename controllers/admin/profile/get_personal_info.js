@@ -29,12 +29,15 @@ module.exports = async (req, res) => {
         const expiresAtDate = new Date(expiresAtTimestamp * 1000); // Convert seconds to milliseconds
         expiresAtString = expiresAtDate.toLocaleString();
         const subscriptionId = checkoutSession.subscription;
-        subscription = await stripe.subscriptions.retrieve(subscriptionId);
-        if(subscription) {
-          const currentPeriodEndTimestamp = subscription.current_period_end;
-           currentPeriodEnd = new Date(currentPeriodEndTimestamp * 1000).toLocaleString();
-          planInterval = subscription.plan?.interval;
+        if (subscriptionId) {
+          subscription = await stripe.subscriptions.retrieve(subscriptionId);
+          if (subscription) {
+            const currentPeriodEndTimestamp = subscription.current_period_end;
+            currentPeriodEnd = new Date(currentPeriodEndTimestamp * 1000).toLocaleString();
+            planInterval = subscription.plan?.interval;
+          }
         }
+
       }
 
     }
@@ -44,7 +47,7 @@ module.exports = async (req, res) => {
       code: 200,
       status: true,
       message: "User get successfully.",
-      result: { user,currentPeriodEnd,planInterval },
+      result: { user, currentPeriodEnd, planInterval },
     });
   } catch (error) {
     return res.status(200).json({
