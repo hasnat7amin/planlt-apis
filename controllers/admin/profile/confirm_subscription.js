@@ -12,12 +12,7 @@ module.exports = async (req, res) => {
     const session = await stripe.checkout.sessions.retrieve(
       user.subscriptionSessionId
     );
-    const expiresAtString = null;
-    if (session) {
-      const expiresAtTimestamp = session.expires_at;
-      const expiresAtDate = new Date(expiresAtTimestamp * 1000); // Convert seconds to milliseconds
-      expiresAtString = expiresAtDate.toLocaleString();
-    }
+   
 
     if (session && session.payment_status === "paid") {
       const startDate = new Date();
@@ -26,7 +21,7 @@ module.exports = async (req, res) => {
         subscriptionCheckoutUrl: null,
         membership: "premium",
         subscriptionStartDate: startDate,
-        membershipExpiresAt: expiresAtString
+       
       });
     }
 
