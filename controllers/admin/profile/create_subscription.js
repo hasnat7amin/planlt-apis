@@ -9,7 +9,7 @@ module.exports = async (req, res) => {
 
     const user = await Users.findById(req.user._id);
 
-    if (user.membership=="none"|| !user.subscriptionSessionId) {
+    
       const session = await stripe.checkout.sessions.create({
         mode: "subscription",
         payment_method_types: ["card"],
@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
         subscriptionSessionId: session.id,
         subscriptionCheckoutUrl: session.url,
       });
-    }
+    
 
     return res.status(200).json({
       code: 200,
